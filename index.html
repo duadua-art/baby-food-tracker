@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>副食品日記</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F2F7;--sur:#FFF;--sur2:#F2F2F7;--sur3:#E5E5EA;
+  --lbl:#000;--lbl2:rgba(60,60,67,.6);--lbl3:rgba(60,60,67,.3);
+  --sep:rgba(60,60,67,.12);--fill:rgba(120,120,128,.12);--fill2:rgba(120,120,128,.08);
+  --acc:#FF6B35;--acc-bg:rgba(255,107,53,.10);
+  --grn:#34C759;--grn-bg:rgba(52,199,89,.10);
+  --red:#FF3B30;--red-bg:rgba(255,59,48,.10);
+  --amb:#FF9500;--amb-bg:rgba(255,149,0,.10);
+  --blu:#007AFF;--blu-bg:rgba(0,122,255,.10);
+  --pur:#AF52DE;--pur-bg:rgba(175,82,222,.10);
+  --r:16px;--rsm:12px;--rlg:22px;
+  --spring:cubic-bezier(.34,1.56,.64,1);--ease:cubic-bezier(.25,.1,.25,1);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#000;--sur:#1C1C1E;--sur2:#2C2C2E;--sur3:#3A3A3C;
+  --lbl:#fff;--lbl2:rgba(235,235,245,.6);--lbl3:rgba(235,235,245,.3);
+  --sep:rgba(84,84,88,.4);--fill:rgba(120,120,128,.2);--fill2:rgba(120,120,128,.16);
+  --acc-bg:rgba(255,107,53,.18);--grn-bg:rgba(52,199,89,.18);
+  --red-bg:rgba(255,59,48,.18);--amb-bg:rgba(255,149,0,.18);
+  --blu-bg:rgba(0,122,255,.18);--pur-bg:rgba(175,82,222,.18);
+}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);color:var(--lbl);overscroll-behavior:none;}
+.app{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:100px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* Header */
+.hdr{background:var(--sur);padding:14px 18px 0;border-bottom:.5px solid var(--sep);flex-shrink:0;z-index:10;}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.pg-title{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;letter-spacing:-.3px;}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.date-chip{font-size:11px;font-weight:600;color:var(--lbl2);background:var(--fill);padding:4px 11px;border-radius:999px;}
+.user-btn{display:flex;align-items:center;gap:5px;background:var(--fill);border-radius:999px;padding:5px 11px 5px 6px;border:none;cursor:pointer;color:var(--lbl);font-family:inherit;transition:opacity .15s;}
+.user-btn:active{opacity:.6;}
+.avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.user-label{font-size:12px;font-weight:700;}
+.seg-wrap{padding:10px 0 12px;}
+.segs{display:flex;background:var(--fill);border-radius:var(--rsm);padding:3px;}
+.seg{flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:700;color:var(--lbl2);cursor:pointer;border:none;background:transparent;border-radius:9px;transition:all .2s var(--ease);font-family:'Noto Sans TC',sans-serif;}
+.seg.act{background:var(--sur);color:var(--lbl);box-shadow:0 1px 4px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.06);}
+
+/* Pages */
+.pg{display:none;}.pg.act{display:block;}
+.pad{padding:0 16px;}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.scard{background:var(--sur);border-radius:var(--r);padding:14px 10px;text-align:center;}
+.snum{font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;line-height:1;}
+.slbl{font-size:10px;color:var(--lbl2);margin-top:3px;font-weight:500;}
+.scard.co .snum{color:var(--acc);}
+.scard.cg .snum{color:var(--grn);}
+.scard.cr .snum{color:var(--red);}
+
+/* Section header */
+.shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:0 4px;}
+.stitle{font-size:12px;font-weight:700;color:var(--lbl2);letter-spacing:.04em;text-transform:uppercase;}
+.sact{font-size:13px;font-weight:600;color:var(--blu);cursor:pointer;}
+
+/* ── XP / Level ── */
+.xp-card{background:var(--sur);border-radius:20px;padding:16px 18px;margin-bottom:14px;}
+.xp-top{display:flex;align-items:center;gap:14px;}
+.xp-ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0;}
+.xp-ring-wrap svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.xp-ring-bg{fill:none;stroke:var(--sur3);stroke-width:5;}
+.xp-ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .9s var(--ease);}
+.xp-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.xp-lv{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--acc);line-height:1;}
+.xp-lv-lbl{font-size:9px;color:var(--lbl3);font-weight:700;margin-top:1px;letter-spacing:.03em;}
+.xp-right{flex:1;min-width:0;}
+.xp-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--lbl);margin-bottom:2px;}
+.xp-sub{font-size:11px;color:var(--lbl2);margin-bottom:9px;line-height:1.4;}
+.xp-barwrap{background:var(--sur3);border-radius:999px;height:6px;overflow:hidden;}
+.xp-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#FF6B35,#FF9500);transition:width .9s var(--ease);}
+.xp-barlbl{display:flex;justify-content:space-between;margin-top:4px;}
+.xp-cur{font-size:11px;font-weight:700;color:var(--acc);}
+.xp-max{font-size:11px;color:var(--lbl3);}
+.xp-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);}
+.xp-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--amb-bg);color:var(--amb);border:1px solid rgba(255,149,0,.2);}
+
+/* Food grid - emoji face design */
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.fcard{
+  background:var(--sur);border-radius:var(--r);padding:14px 8px 12px;
+  text-align:center;cursor:pointer;border:2px solid transparent;
+  transition:all .18s var(--spring);position:relative;user-select:none;overflow:hidden;
+}
+.fcard:active{transform:scale(.91);}
+.fcard.tried{border-color:var(--grn);background:var(--grn-bg);}
+.fcard.liked{border-color:var(--grn);background:var(--grn-bg);}
+.fcard.disliked{border-color:var(--grn);background:var(--grn-bg);}
+.fcard.allergic{border-color:var(--red);background:var(--red-bg);}
+.face{font-size:30px;line-height:1;margin-bottom:5px;display:block;filter:grayscale(1);opacity:.38;transition:all .25s;}
+.fcard.tried .face,.fcard.liked .face,.fcard.disliked .face{filter:grayscale(0);opacity:1;}
+.fcard.allergic .face{filter:grayscale(0);opacity:1;}
+.fname{font-size:12px;font-weight:600;color:var(--lbl);line-height:1.3;}
+.fbadge{position:absolute;top:5px;right:5px;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:9px;color:#fff;}
+.fcard.tried .fbadge,.fcard.liked .fbadge,.fcard.disliked .fbadge{display:flex;background:var(--grn);}
+.fcard.allergic .fbadge{display:flex;background:var(--red);}
+
+/* Log list */
+.llist{background:var(--sur);border-radius:var(--rlg);overflow:hidden;margin-bottom:16px;}
+.lrow{display:flex;align-items:center;padding:12px 16px;gap:11px;border-bottom:.5px solid var(--sep);}
+.lrow:last-child{border-bottom:none;}
+.lrow:active{background:var(--fill2);}
+.licon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.licon.ok{background:var(--grn-bg);}
+.licon.bad{background:var(--red-bg);}
+.licon.meh{background:var(--amb-bg);}
+.licon.pl{background:var(--fill);}
+.lbody{flex:1;min-width:0;}
+.lname{font-size:15px;font-weight:600;color:var(--lbl);}
+.ldet{font-size:11px;color:var(--lbl2);margin-top:2px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
+.ltm{font-size:11px;color:var(--lbl3);flex-shrink:0;}
+.who-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:600;}
+.pg{background:var(--grn-bg);color:var(--grn);}
+.pr{background:var(--red-bg);color:var(--red);}
+.pa{background:var(--amb-bg);color:var(--amb);}
+.pp{background:var(--fill);color:var(--lbl2);}
+.pb{background:var(--blu-bg);color:var(--blu);}
+
+/* Allergy countdown */
+.acard{background:var(--sur);border-radius:var(--rlg);border-left:4px solid var(--red);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;}
+.acount{width:52px;height:52px;border-radius:14px;background:var(--red-bg);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.anum{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--red);line-height:1;}
+.aunit{font-size:10px;color:var(--red);font-weight:600;}
+.ainfo{flex:1;}
+.afood{font-size:15px;font-weight:700;color:var(--lbl);}
+.asub{font-size:12px;color:var(--lbl2);margin-top:2px;}
+.arxns{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+
+/* Cat scroll */
+.catscroll{overflow-x:auto;padding:0 16px 14px;display:flex;gap:8px;}
+.catscroll::-webkit-scrollbar{display:none;}
+.catchip{display:flex;align-items:center;gap:5px;white-space:nowrap;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;background:var(--sur);color:var(--lbl2);cursor:pointer;border:1.5px solid transparent;transition:all .18s;flex-shrink:0;font-family:'Noto Sans TC',sans-serif;}
+.catchip.act{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);}
+
+/* Empty */
+.empty{text-align:center;padding:40px 20px;}
+.ei{font-size:44px;margin-bottom:10px;}
+.et{font-size:14px;font-weight:500;color:var(--lbl2);}
+.eh{font-size:12px;color:var(--lbl3);margin-top:4px;}
+
+/* Date header */
+.dhdr{font-size:12px;font-weight:700;color:var(--lbl2);letter-spacing:.03em;padding:14px 20px 6px;}
+
+/* RECIPE CARDS */
+.rcards{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.rcard{background:var(--sur);border-radius:var(--rlg);overflow:hidden;}
+.rcard-top{padding:16px 16px 12px;display:flex;gap:12px;align-items:flex-start;}
+.rcard-avatar{width:44px;height:44px;border-radius:12px;background:var(--acc-bg);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.rcard-info{flex:1;min-width:0;}
+.rcard-title{font-size:16px;font-weight:700;color:var(--lbl);}
+.rcard-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;align-items:center;}
+.rcard-ingr{font-size:13px;color:var(--lbl2);padding:0 16px 14px;line-height:1.7;border-top:.5px solid var(--sep);padding-top:12px;}
+.rcard-actions{display:flex;border-top:.5px solid var(--sep);}
+.rcard-btn{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:var(--blu);cursor:pointer;border:none;background:transparent;font-family:'Noto Sans TC',sans-serif;transition:background .15s;}
+.rcard-btn:active{background:var(--fill2);}
+.rcard-btn.del{color:var(--red);}
+.rcard-btn+.rcard-btn{border-left:.5px solid var(--sep);}
+
+/* AI section */
+.aihdr{background:linear-gradient(135deg,#AF52DE,#7C6FCD);border-radius:var(--rlg);padding:20px;margin-bottom:16px;color:#fff;}
+.aititle{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;margin-bottom:4px;}
+.aisub{font-size:13px;opacity:.85;line-height:1.5;}
+.aibtn{margin-top:12px;padding:11px 20px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .15s;}
+.aibtn:active{transform:scale(.95);opacity:.8;}
+.aircard{background:var(--sur);border-radius:var(--rlg);padding:16px;margin-bottom:10px;}
+.airtop{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
+.airbadge{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.airname{font-size:16px;font-weight:700;color:var(--lbl);}
+.airsub{font-size:12px;color:var(--lbl2);margin-top:1px;}
+.airbody{font-size:13px;color:var(--lbl2);line-height:1.7;}
+.airtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.airtag{padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;background:var(--pur-bg);color:var(--pur);}
+.dots{display:flex;gap:6px;justify-content:center;padding:32px 0;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--pur);opacity:.3;animation:dp 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes dp{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+
+/* Overlay + Sheet */
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:50;display:none;transition:background .3s;}
+.ovl.open{display:block;background:rgba(0,0,0,.45);}
+.sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;background:var(--sur);border-radius:20px 20px 0 0;z-index:51;transition:transform .4s var(--spring);will-change:transform;max-height:93dvh;overflow-y:auto;}
+.sheet::-webkit-scrollbar{display:none;}
+.sheet.open{transform:translateX(-50%) translateY(0);}
+.shandle{width:36px;height:4px;border-radius:2px;background:var(--sur3);margin:10px auto 0;}
+.sbody{padding:16px 20px 32px;}
+.stit{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--lbl);margin-bottom:2px;}
+.ssub{font-size:13px;color:var(--lbl2);margin-bottom:18px;}
+.flbl{font-size:11px;font-weight:700;color:var(--lbl2);margin-bottom:8px;letter-spacing:.04em;text-transform:uppercase;}
+
+/* Pref */
+.prefrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px;}
+.pbtn{padding:14px 8px;border-radius:var(--r);text-align:center;border:2px solid var(--sep);background:var(--fill2);cursor:pointer;transition:all .18s var(--spring);font-family:'Noto Sans TC',sans-serif;}
+.pbtn:active{transform:scale(.93);}
+.pface{font-size:26px;display:block;margin-bottom:4px;}
+.plbl{font-size:12px;font-weight:700;color:var(--lbl2);}
+.pbtn.sl{border-color:var(--grn);background:var(--grn-bg);}
+.pbtn.sl .plbl{color:var(--grn);}
+.pbtn.sm{border-color:var(--amb);background:var(--amb-bg);}
+.pbtn.sm .plbl{color:var(--amb);}
+.pbtn.sd{border-color:var(--lbl3);background:var(--fill);}
+.pbtn.sd .plbl{color:var(--lbl2);}
+
+/* Chip rows */
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
+.chip{padding:8px 15px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--sep);background:var(--fill2);color:var(--lbl2);cursor:pointer;transition:all .15s;font-family:'Noto Sans TC',sans-serif;}
+.chip.sel{border-color:var(--blu);background:var(--blu-bg);color:var(--blu);}
+.chip.selr{border-color:var(--red);background:var(--red-bg);color:var(--red);}
+
+/* Toggle */
+.tgtog{background:var(--fill2);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;}
+.tgrow{display:flex;justify-content:space-between;align-items:center;}
+.tglbl{font-size:15px;font-weight:600;color:var(--lbl);}
+.tgsw{width:48px;height:28px;border-radius:14px;background:var(--sur3);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.tgsw.on{background:var(--red);}
+.tgthumb{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s var(--spring);}
+.tgsw.on .tgthumb{transform:translateX(20px);}
+.tghint{font-size:12px;color:var(--lbl2);margin-top:4px;}
+.rxnwrap{overflow:hidden;max-height:0;transition:max-height .3s var(--ease),opacity .3s;opacity:0;pointer-events:none;padding-top:0;}
+.rxnwrap.show{max-height:200px;opacity:1;pointer-events:all;padding-top:12px;}
+
+/* Inputs */
+.ninput{width:100%;padding:12px 14px;border-radius:var(--rsm);border:1.5px solid var(--sep);background:var(--fill2);color:var(--lbl);font-size:14px;font-family:'Noto Sans TC',sans-serif;outline:none;transition:border-color .2s;}
+.ninput:focus{border-color:var(--blu);}
+.ninput::placeholder{color:var(--lbl3);}
+textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
+
+/* Save btn */
+.savebtn{width:100%;padding:15px;border-radius:var(--r);border:none;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FF6B35,#FF9500);color:#fff;cursor:pointer;letter-spacing:.2px;transition:all .18s var(--spring);box-shadow:0 4px 14px rgba(255,107,53,.35);}
+.savebtn:active{transform:scale(.97);}
+.savebtn.pur{background:linear-gradient(135deg,#AF52DE,#7C6FCD);box-shadow:0 4px 14px rgba(175,82,222,.3);}
+
+/* User role selector */
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.rolebtn{padding:18px 8px;border-radius:var(--r);text-align:center;border:2px solid var(--sep);background:var(--fill2);cursor:pointer;transition:all .18s var(--spring);}
+.rolebtn:active{transform:scale(.93);}
+.ricon{font-size:26px;display:block;margin-bottom:5px;}
+.rlbl2{font-size:12px;font-weight:700;color:var(--lbl2);}
+.rolebtn.sel2{border-color:var(--blu);background:var(--blu-bg);}
+.rolebtn.sel2 .rlbl2{color:var(--blu);}
+
+/* Family code */
+.famcode{font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;letter-spacing:4px;color:var(--acc);text-align:center;padding:12px;background:var(--acc-bg);border-radius:var(--rsm);margin-bottom:8px;}
+
+/* Toast */
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(6px) scale(.95);background:rgba(50,50,52,.92);backdrop-filter:blur(10px);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s var(--spring);z-index:200;white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+
+/* Share modal overlay */
+.share-box{background:var(--sur);border-radius:var(--rlg);padding:20px;margin:16px;}
+.share-url{font-size:11px;color:var(--lbl2);background:var(--fill2);border-radius:var(--rsm);padding:10px;word-break:break-all;margin-bottom:12px;line-height:1.5;}
+.share-actions{display:flex;gap:8px;}
+.share-btn{flex:1;padding:12px;border-radius:var(--rsm);border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .15s;}
+.share-btn.copy{background:var(--blu);color:#fff;}
+.share-btn.close{background:var(--fill);color:var(--lbl2);}
+.share-btn:active{opacity:.8;}
+
+/* ── Baby switcher ── */
+.baby-switcher-btn{display:flex;align-items:center;gap:6px;background:var(--fill);border-radius:999px;padding:5px 12px 5px 8px;border:none;cursor:pointer;font-family:inherit;transition:opacity .15s;max-width:160px;}
+.baby-switcher-btn:active{opacity:.6;}
+.baby-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-style:normal;}
+.baby-switcher-label{font-size:13px;font-weight:700;color:var(--lbl);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.baby-switcher-caret{font-size:10px;color:var(--lbl3);flex-shrink:0;}
+/* Baby cards in switcher sheet */
+.baby-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.baby-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--fill2);border-radius:var(--r);border:2px solid transparent;cursor:pointer;transition:all .15s;}
+.baby-item.act{border-color:var(--acc);background:var(--acc-bg);}
+.baby-item-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--sur);flex-shrink:0;}
+.baby-item-info{flex:1;min-width:0;}
+.baby-item-name{font-size:15px;font-weight:700;color:var(--lbl);}
+.baby-item-sub{font-size:12px;color:var(--lbl2);margin-top:1px;}
+.baby-item-actions{display:flex;gap:6px;}
+.baby-item-btn{padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--sep);background:var(--sur);color:var(--lbl2);cursor:pointer;font-family:inherit;}
+.baby-item-btn:active{opacity:.7;}
+.add-baby-btn{width:100%;padding:13px;border-radius:var(--r);border:2px dashed var(--sep);background:transparent;font-size:14px;font-weight:600;color:var(--lbl2);cursor:pointer;font-family:inherit;transition:all .15s;margin-bottom:6px;}
+.add-baby-btn:active{opacity:.6;}
+/* Edit baby form inside switcher sheet */
+.baby-edit-form{background:var(--fill2);border-radius:var(--r);padding:14px;margin-bottom:16px;}
+.baby-edit-title{font-size:13px;font-weight:700;color:var(--lbl);margin-bottom:12px;}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <div class="hdr-top">
+    <button class="baby-switcher-btn" onclick="openSheet('babies')" id="baby-switcher-btn">
+      <em class="baby-dot" id="hdr-baby-dot">🍼</em>
+      <span class="baby-switcher-label" id="hdr-baby-name">選擇寶寶</span>
+      <span class="baby-switcher-caret">▾</span>
+    </button>
+    <div class="hdr-right">
+      <div class="date-chip" id="date-chip"></div>
+      <button class="user-btn" onclick="openUserSheet()">
+        <div class="avatar" id="hdr-avatar">🌱</div>
+        <span class="user-label" id="hdr-uname">設定</span>
+      </button>
+    </div>
+  </div>
+  <div id="pg-title" style="display:none">今日</div>
+  <div class="seg-wrap">
+    <div class="segs">
+      <button class="seg act" onclick="switchPg('today',this)">今日</button>
+      <button class="seg" onclick="switchPg('food',this)">食材</button>
+      <button class="seg" onclick="switchPg('history',this)">紀錄</button>
+      <button class="seg" onclick="switchPg('recipe',this)">食譜</button>
+      <button class="seg" onclick="switchPg('ai',this)">✨</button>
+    </div>
+  </div>
+</div>
+
+<div class="scroll" id="scroll">
+
+  <!-- TODAY -->
+  <div id="pg-today" class="pg act">
+    <div class="pad" style="padding-top:14px">
+
+      <!-- XP Card -->
+      <div class="xp-card">
+        <div class="xp-top">
+          <div class="xp-ring-wrap">
+            <svg viewBox="0 0 72 72" width="72" height="72">
+              <circle class="xp-ring-bg" cx="36" cy="36" r="31"/>
+              <circle class="xp-ring-fill" id="xp-ring-fill" cx="36" cy="36" r="31" stroke="#FF6B35" stroke-dasharray="194.8" stroke-dashoffset="194.8"/>
+            </svg>
+            <div class="xp-center">
+              <div class="xp-lv" id="xp-lv">Lv.1</div>
+              <div class="xp-lv-lbl">等級</div>
+            </div>
+          </div>
+          <div class="xp-right">
+            <div class="xp-title" id="xp-title">美食小探險家</div>
+            <div class="xp-sub" id="xp-sub">再嘗試 5 種食材升級！</div>
+            <div class="xp-barwrap"><div class="xp-bar" id="xp-bar" style="width:0%"></div></div>
+            <div class="xp-barlbl">
+              <span class="xp-cur" id="xp-cur">0 種食材</span>
+              <span class="xp-max" id="xp-max">目標 5 種</span>
+            </div>
+          </div>
+        </div>
+        <div class="xp-badges" id="xp-badges"></div>
+      </div>
+
+      <div class="stats">
+        <div class="scard co"><div class="snum" id="s-today">0</div><div class="slbl">今日餐次</div></div>
+        <div class="scard cg"><div class="snum" id="s-foods">0</div><div class="slbl">已試食材</div></div>
+        <div class="scard cr"><div class="snum" id="s-alert">0</div><div class="slbl">過敏警示</div></div>
+      </div>
+      <div id="allergy-sec" style="display:none">
+        <div class="shdr"><span class="stitle">⚠️ 試敏倒數</span></div>
+        <div id="allergy-list"></div>
+      </div>
+      <div class="shdr"><span class="stitle">今日紀錄</span></div>
+    </div>
+    <div id="today-log"></div>
+  </div>
+
+  <!-- FOOD -->
+  <div id="pg-food" class="pg">
+    <div class="catscroll" id="catscroll" style="padding-top:14px"></div>
+    <div class="pad">
+      <div class="shdr">
+        <span class="stitle" id="cat-lbl">蔬菜類</span>
+        <span class="sact" onclick="openSheet('custom')">＋ 自訂食材</span>
+      </div>
+      <div class="fgrid" id="fgrid"></div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="pg-history" class="pg">
+    <div id="hist-content" style="padding-top:8px"></div>
+  </div>
+
+  <!-- RECIPE -->
+  <div id="pg-recipe" class="pg">
+    <div class="pad" style="padding-top:14px">
+      <div class="shdr">
+        <span class="stitle">我的食譜</span>
+        <span class="sact" onclick="openSheet('recipe')">＋ 新增食譜</span>
+      </div>
+      <div id="recipe-list"></div>
+    </div>
+  </div>
+
+  <!-- AI -->
+  <div id="pg-ai" class="pg">
+    <div class="pad" style="padding-top:14px">
+      <div class="aihdr">
+        <div class="aititle">✨ AI 副食品推薦</div>
+        <div class="aisub">根據已嘗試食材與喜好<br>推薦 7-9 個月寶寶的下一步</div>
+        <button class="aibtn" onclick="loadAI()">幫我推薦食材與食譜 →</button>
+      </div>
+      <div id="ai-content">
+        <div class="empty"><div class="ei">🤖</div><div class="et">點擊上方按鈕</div><div class="eh">AI 會根據你的紀錄個人化推薦</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /scroll -->
+</div><!-- /app -->
+
+<!-- ── RECORD SHEET ── -->
+<div class="ovl" id="ovl-record" onclick="closeSheet('record')"></div>
+<div class="sheet" id="sheet-record">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit" id="sr-title"></div>
+    <div class="ssub" id="sr-sub"></div>
+    <div class="flbl">寶寶喜好</div>
+    <div class="prefrow" id="pref-row">
+      <div class="pbtn" data-v="like" onclick="selPref(this)"><span class="pface">😍</span><span class="plbl">喜歡</span></div>
+      <div class="pbtn" data-v="meh" onclick="selPref(this)"><span class="pface">😐</span><span class="plbl">普通</span></div>
+      <div class="pbtn" data-v="dislike" onclick="selPref(this)"><span class="pface">😤</span><span class="plbl">不喜歡</span></div>
+    </div>
+    <div class="flbl">進食份量</div>
+    <div class="chips" id="amt-row">
+      <div class="chip" data-v="少量(1-2匙)" onclick="selChip(this,'amt-row')">少量</div>
+      <div class="chip sel" data-v="半份(3-5匙)" onclick="selChip(this,'amt-row')">半份</div>
+      <div class="chip" data-v="一份(6-10匙)" onclick="selChip(this,'amt-row')">一份</div>
+      <div class="chip" data-v="完食" onclick="selChip(this,'amt-row')">完食</div>
+    </div>
+    <div class="tgtog">
+      <div class="tgrow">
+        <div class="tglbl">⚠️ 有異常反應</div>
+        <div class="tgsw" id="asw" onclick="toggleAllergy()"><div class="tgthumb"></div></div>
+      </div>
+      <div class="tghint" id="ahint">如有起疹子、嘔吐等，請開啟</div>
+    </div>
+    <div class="rxnwrap" id="rxnwrap">
+      <div class="flbl">選擇反應（可複選）</div>
+      <div class="chips" id="rxn-row" style="margin-bottom:0">
+        <div class="chip" data-v="起疹子" onclick="togRxn(this)">🔴 起疹子</div>
+        <div class="chip" data-v="嘔吐" onclick="togRxn(this)">🤮 嘔吐</div>
+        <div class="chip" data-v="腹瀉" onclick="togRxn(this)">💩 腹瀉</div>
+        <div class="chip" data-v="哭鬧不止" onclick="togRxn(this)">😭 哭鬧</div>
+        <div class="chip" data-v="嘴唇腫脹" onclick="togRxn(this)">🫦 嘴唇腫</div>
+        <div class="chip" data-v="眼睛充血" onclick="togRxn(this)">👁 眼充血</div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <input class="ninput" id="sr-note" placeholder="備註（料理方式、稠度等）" style="margin-bottom:18px"/>
+    <button class="savebtn" onclick="saveRecord()">完成紀錄</button>
+  </div>
+</div>
+
+<!-- ── USER SHEET ── -->
+<div class="ovl" id="ovl-user" onclick="closeSheet('user')"></div>
+<div class="sheet" id="sheet-user">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit">👨‍👩‍👧 家庭設定</div>
+    <div class="ssub">所有成員使用同一個家庭代碼，即可共同看到所有紀錄</div>
+
+    <div class="flbl">我的角色</div>
+    <div class="role-grid" id="role-grid">
+      <div class="rolebtn" data-v="爸爸" onclick="selRole(this)"><span class="ricon">👨</span><span class="rlbl2">爸爸</span></div>
+      <div class="rolebtn" data-v="媽媽" onclick="selRole(this)"><span class="ricon">👩</span><span class="rlbl2">媽媽</span></div>
+      <div class="rolebtn" data-v="阿公" onclick="selRole(this)"><span class="ricon">👴</span><span class="rlbl2">阿公</span></div>
+      <div class="rolebtn" data-v="阿嬤" onclick="selRole(this)"><span class="ricon">👵</span><span class="rlbl2">阿嬤</span></div>
+      <div class="rolebtn" data-v="保母" onclick="selRole(this)"><span class="ricon">🧑</span><span class="rlbl2">保母</span></div>
+      <div class="rolebtn" data-v="其他" onclick="selRole(this)"><span class="ricon">😊</span><span class="rlbl2">其他</span></div>
+    </div>
+    <div class="flbl">我的暱稱</div>
+    <input class="ninput" id="u-name" placeholder="例：小明爸、Vivian媽" style="margin-bottom:18px"/>
+    <div class="flbl">家庭代碼</div>
+    <div style="font-size:13px;color:var(--lbl2);margin-bottom:8px;line-height:1.6">所有家庭成員輸入相同代碼即可共享資料。首次使用請點「建立新家庭」，已有代碼請直接輸入。</div>
+    <div id="fam-display" style="display:none">
+      <div class="famcode" id="fam-code-show"></div>
+      <div style="font-size:12px;color:var(--lbl3);text-align:center;margin-bottom:14px">把這個代碼告訴家人，讓大家一起記錄</div>
+    </div>
+    <input class="ninput" id="u-famcode" placeholder="輸入 6 位家庭代碼（或留空單人使用）" style="margin-bottom:10px;font-family:'Nunito',sans-serif;letter-spacing:2px;font-size:16px;text-transform:uppercase"/>
+    <button class="savebtn" style="margin-bottom:10px" onclick="genFamCode()">建立新家庭（產生代碼）</button>
+    <button class="savebtn" onclick="saveUser()">儲存設定</button>
+  </div>
+</div>
+
+<!-- ── RECIPE SHEET ── -->
+<div class="ovl" id="ovl-recipe" onclick="closeSheet('recipe')"></div>
+<div class="sheet" id="sheet-recipe">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit" id="recipe-sheet-title">新增食譜</div>
+    <div class="ssub">記錄你的獨家副食品食譜</div>
+    <input type="hidden" id="rec-edit-id"/>
+    <div class="flbl">食譜名稱</div>
+    <input class="ninput" id="rec-name" placeholder="例：時蔬雞肉粥、南瓜豆腐泥" style="margin-bottom:16px"/>
+    <div class="flbl">食材與做法 <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--lbl3)">（最多 500 字）</span></div>
+    <textarea class="ninput" id="rec-body" placeholder="食材：南瓜50g、雞胸肉30g、白米粥100g&#10;&#10;做法：&#10;1. 南瓜蒸熟壓泥&#10;2. 雞胸肉蒸熟切碎&#10;3. 拌入白米粥即完成" maxlength="500" oninput="countChars(this)" style="margin-bottom:6px;min-height:140px"></textarea>
+    <div style="text-align:right;font-size:11px;color:var(--lbl3);margin-bottom:18px"><span id="char-count">0</span> / 500</div>
+    <button class="savebtn pur" onclick="saveRecipe()">儲存食譜</button>
+  </div>
+</div>
+
+<!-- ── SHARE SHEET ── -->
+<div class="ovl" id="ovl-share" onclick="closeSheet('share')"></div>
+<div class="sheet" id="sheet-share">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit">分享食譜</div>
+    <div class="ssub" id="share-recipe-name"></div>
+    <div class="flbl">分享連結</div>
+    <div class="share-url" id="share-url-text"></div>
+    <div style="font-size:12px;color:var(--lbl3);margin-bottom:16px">朋友用瀏覽器開啟此連結，即可看到食譜內容。</div>
+    <div class="share-actions">
+      <button class="share-btn copy" onclick="copyShareUrl()">複製連結</button>
+      <button class="share-btn close" onclick="closeSheet('share')">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CUSTOM FOOD SHEET ── -->
+<div class="ovl" id="ovl-custom" onclick="closeSheet('custom')"></div>
+<div class="sheet" id="sheet-custom">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit">＋ 新增食材</div>
+    <div class="ssub">找不到的食材可手動新增</div>
+    <div class="flbl">食材名稱</div>
+    <input class="ninput" id="cust-name" placeholder="例：牛肉泥、毛豆泥" style="margin-bottom:16px"/>
+    <div class="flbl">分類</div>
+    <div class="chips" id="cust-cat-row">
+      <div class="chip sel" data-v="蔬菜類" onclick="selChip(this,'cust-cat-row')">蔬菜</div>
+      <div class="chip" data-v="穀物主食" onclick="selChip(this,'cust-cat-row')">穀物</div>
+      <div class="chip" data-v="蛋白質" onclick="selChip(this,'cust-cat-row')">蛋白質</div>
+      <div class="chip" data-v="水果類" onclick="selChip(this,'cust-cat-row')">水果</div>
+      <div class="chip" data-v="其他" onclick="selChip(this,'cust-cat-row')">其他</div>
+    </div>
+    <button class="savebtn" onclick="addCustFood()">新增食材</button>
+  </div>
+</div>
+
+
+<!-- ── BABIES SHEET ── -->
+<div class="ovl" id="ovl-babies" onclick="closeSheet('babies')"></div>
+<div class="sheet" id="sheet-babies">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit">👶 切換寶寶</div>
+    <div class="ssub">選擇要記錄的寶寶，或新增第二個寶寶</div>
+    <div class="baby-list" id="baby-list"></div>
+    <button class="add-baby-btn" onclick="startAddBaby()">＋ 新增寶寶</button>
+    <div class="baby-edit-form" id="baby-edit-form" style="display:none">
+      <div class="baby-edit-title" id="baby-edit-title">新增寶寶</div>
+      <input type="hidden" id="baby-edit-id"/>
+      <div class="flbl">寶寶暱稱 *</div>
+      <input class="ninput" id="baby-edit-name" placeholder="例：小寶、妹妹、阿哲" style="margin-bottom:12px"/>
+      <div class="flbl">出生日期</div>
+      <input class="ninput" type="date" id="baby-edit-birth" style="margin-bottom:16px"/>
+      <div class="flbl">性別</div>
+      <div class="chips" id="baby-gender-row" style="margin-bottom:16px">
+        <div class="chip sel" data-v="boy" onclick="selChip(this,'baby-gender-row')">👦 男寶</div>
+        <div class="chip" data-v="girl" onclick="selChip(this,'baby-gender-row')">👧 女寶</div>
+        <div class="chip" data-v="secret" onclick="selChip(this,'baby-gender-row')">🌈 保密</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="savebtn" style="flex:1" onclick="saveBabyEdit()">儲存</button>
+        <button class="savebtn" style="flex:0 0 80px;background:var(--fill);color:var(--lbl2);box-shadow:none" onclick="cancelBabyEdit()">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+// All food cards use emoji FACES — the face changes based on preference
+// Default: 😶 (neutral, greyed out) → 😍 liked / 😤 disliked / ⚠️ allergic
+const FOOD_DB = {
+  '蔬菜類':[
+    {n:'南瓜'},{n:'地瓜'},{n:'胡蘿蔔'},{n:'菠菜'},{n:'青花菜'},{n:'馬鈴薯'},
+    {n:'玉米'},{n:'豌豆'},{n:'番茄'},{n:'茄子'},{n:'白蘿蔔'},{n:'山藥'},
+  ],
+  '穀物主食':[
+    {n:'白米粥'},{n:'糙米粥'},{n:'米糊'},{n:'燕麥粥'},{n:'細麵'},{n:'土司'},{n:'米餅'},{n:'地瓜泥'},
+  ],
+  '蛋白質':[
+    {n:'雞胸肉'},{n:'豬肉'},{n:'鱈魚'},{n:'鮭魚'},{n:'嫩豆腐'},{n:'雞蛋'},{n:'豬肝'},{n:'納豆'},
+  ],
+  '水果類':[
+    {n:'蘋果'},{n:'香蕉'},{n:'梨子'},{n:'哈密瓜'},{n:'酪梨'},{n:'芒果'},{n:'草莓'},{n:'藍莓'},{n:'木瓜'},
+  ],
+  '其他':[],
+};
+
+function getFoodFace(pref, isAllergic) {
+  if (isAllergic) return '😵';
+  if (pref === 'like') return '😍';
+  if (pref === 'meh') return '😐';
+  if (pref === 'dislike') return '😤';
+  return '😯';
+}
+
+// ── State ──
+let babies=[];          // [{id,name,birth,gender}]
+let curBabyId='';       // active baby id
+let records=[], triedFoods={}, recipes=[], customFoods={};
+let curUser={name:'',role:'',famCode:''};
+let curFood=null, selPref2=null, selAmt='半份(3-5匙)', allergyOn=false, selRxns=[];
+let curCat='蔬菜類';
+let shareUrl='';
+
+function curBaby(){ return babies.find(b=>b.id===curBabyId)||babies[0]||null; }
+function babyStorKey(k){
+  const fc=curUser.famCode||'__local__';
+  const bid=curBabyId||'default';
+  return fc+'_'+bid+'_'+k;
+}
+
+// ═══════════════════════════════════════════════════
+// STORAGE — uses famCode as key prefix for shared data
+// ═══════════════════════════════════════════════════
+const LOCAL_KEY = 'bft4';
+function storKey(k){ return babyStorKey(k); }
+function saveShared(){
+  try{
+    localStorage.setItem(storKey('records'), JSON.stringify(records));
+    localStorage.setItem(storKey('tried'), JSON.stringify(triedFoods));
+    localStorage.setItem(storKey('recipes'), JSON.stringify(recipes));
+    localStorage.setItem(storKey('custom'), JSON.stringify(customFoods));
+  }catch(e){}
+}
+function saveLocal(){
+  try{
+    localStorage.setItem(LOCAL_KEY+'_user', JSON.stringify(curUser));
+    localStorage.setItem(LOCAL_KEY+'_babies', JSON.stringify(babies));
+    localStorage.setItem(LOCAL_KEY+'_curBaby', curBabyId);
+  }catch(e){}
+}
+function loadShared(){
+  try{
+    records=JSON.parse(localStorage.getItem(storKey('records'))||'[]');
+    triedFoods=JSON.parse(localStorage.getItem(storKey('tried'))||'{}');
+    recipes=JSON.parse(localStorage.getItem(storKey('recipes'))||'[]');
+    customFoods=JSON.parse(localStorage.getItem(storKey('custom'))||'{}');
+    // Merge custom into FOOD_DB
+    Object.entries(customFoods).forEach(([cat,items])=>{
+      if(!FOOD_DB[cat]) FOOD_DB[cat]=[];
+      items.forEach(f=>{ if(!FOOD_DB[cat].find(x=>x.n===f.n)) FOOD_DB[cat].push({n:f.n}); });
+    });
+  }catch(e){}
+}
+function loadAll(){
+  try{ curUser=JSON.parse(localStorage.getItem(LOCAL_KEY+'_user')||'{"name":"","role":"","famCode":""}'); }catch(e){}
+  try{ babies=JSON.parse(localStorage.getItem(LOCAL_KEY+'_babies')||'[]'); }catch(e){}
+  try{ curBabyId=localStorage.getItem(LOCAL_KEY+'_curBaby')||''; }catch(e){}
+  // Create default baby if none
+  if(!babies.length){
+    const def={id:'baby_'+Date.now(),name:'寶寶',birth:'',gender:'secret'};
+    babies=[def]; curBabyId=def.id; saveLocal();
+  }
+  if(!curBabyId||!babies.find(b=>b.id===curBabyId)) curBabyId=babies[0].id;
+  loadShared();
+}
+
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+function switchPg(name, el){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.seg').forEach(s=>s.classList.remove('act'));
+  document.getElementById('pg-'+name).classList.add('act');
+  el.classList.add('act');
+  document.getElementById('scroll').scrollTop=0;
+  const tmap={today:'今日',food:'食材庫',history:'所有紀錄',recipe:'我的食譜',ai:'AI 推薦'};
+  document.getElementById('pg-title').textContent=tmap[name];
+  if(name==='history') renderHistory();
+  if(name==='food'){ renderCatTabs(); renderFoodGrid(curCat); }
+  if(name==='recipe') renderRecipes();
+}
+function openSheet(name){
+  if(name==='babies') renderBabyList();
+  document.getElementById('ovl-'+name).classList.add('open');
+  setTimeout(()=>document.getElementById('sheet-'+name).classList.add('open'),10);
+}
+function closeSheet(name){
+  document.getElementById('sheet-'+name).classList.remove('open');
+  document.getElementById('ovl-'+name).classList.remove('open');
+}
+function selChip(el, rowId){
+  document.querySelectorAll('#'+rowId+' .chip').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  if(rowId==='amt-row') selAmt=el.dataset.v;
+}
+
+// ═══════════════════════════════════════════════════
+// USER / FAMILY
+// ═══════════════════════════════════════════════════
+const ROLE_ICON={爸爸:'👨',媽媽:'👩',阿公:'👴',阿嬤:'👵',保母:'🧑',其他:'😊'};
+const ROLE_COLOR={爸爸:'#007AFF',媽媽:'#FF2D55',阿公:'#8E8E93',阿嬤:'#AF52DE',保母:'#34C759',其他:'#FF9500'};
+
+function selRole(el){
+  document.querySelectorAll('.rolebtn').forEach(b=>b.classList.remove('sel2'));
+  el.classList.add('sel2');
+}
+function genFamCode(){
+  const code = Math.random().toString(36).substring(2,8).toUpperCase();
+  document.getElementById('u-famcode').value=code;
+  document.getElementById('fam-code-show').textContent=code;
+  document.getElementById('fam-display').style.display='block';
+  toast('已產生家庭代碼：'+code);
+}
+function saveUser(){
+  const role=document.querySelector('.rolebtn.sel2')?.dataset.v||curUser.role;
+  const name=document.getElementById('u-name').value.trim();
+  const fc=document.getElementById('u-famcode').value.trim().toUpperCase();
+  if(!role){toast('請選擇你的角色');return;}
+  const oldCode=curUser.famCode;
+  curUser={name,role,famCode:fc};
+  saveLocal();
+  if(fc && fc!==oldCode){ loadShared(); }
+  updateHdrUser();
+  closeSheet('user');
+  toast('✓ 設定已儲存');
+  renderToday(); renderRecipes();
+}
+function updateHdrUser(){
+  const r=curUser.role;
+  const icon=ROLE_ICON[r]||'🌱';
+  document.getElementById('hdr-avatar').textContent=icon;
+  document.getElementById('hdr-avatar').style.background=r?(ROLE_COLOR[r]+'22'):'linear-gradient(135deg,#FF9500,#FF6B35)';
+  document.getElementById('hdr-uname').textContent=curUser.name||r||'設定';
+}
+function openUserSheet(){
+  document.getElementById('u-name').value=curUser.name||'';
+  document.getElementById('u-famcode').value=curUser.famCode||'';
+  if(curUser.famCode){
+    document.getElementById('fam-code-show').textContent=curUser.famCode;
+    document.getElementById('fam-display').style.display='block';
+  }
+  if(curUser.role){
+    document.querySelectorAll('.rolebtn').forEach(b=>{
+      b.classList.toggle('sel2', b.dataset.v===curUser.role);
+    });
+  }
+  openSheet('user');
+}
+
+// ═══════════════════════════════════════════════════
+// FOOD GRID
+// ═══════════════════════════════════════════════════
+const CAT_EMOJI={蔬菜類:'🥦',穀物主食:'🌾',蛋白質:'🥩',水果類:'🍎',其他:'🫙'};
+function renderCatTabs(){
+  const cats=Object.keys(FOOD_DB).filter(c=>c!=='其他'||(FOOD_DB['其他']?.length>0));
+  document.getElementById('catscroll').innerHTML=cats.map(c=>
+    `<div class="catchip${c===curCat?' act':''}" onclick="selCat('${c}',this)">${CAT_EMOJI[c]||'🍽'} ${c}</div>`
+  ).join('');
+}
+function selCat(name,el){
+  curCat=name;
+  document.querySelectorAll('.catchip').forEach(c=>c.classList.remove('act'));
+  el.classList.add('act');
+  document.getElementById('cat-lbl').textContent=name;
+  renderFoodGrid(name);
+}
+function renderFoodGrid(cat){
+  const foods=FOOD_DB[cat]||[];
+  const grid=document.getElementById('fgrid');
+  if(!foods.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--lbl3);font-size:13px">點擊「自訂食材」新增</div>`;
+    return;
+  }
+  grid.innerHTML=foods.map(f=>{
+    const t=triedFoods[f.n];
+    let cls='';
+    if(t){
+      if(t.status==='allergic') cls='allergic';
+      else if(t.preference==='like') cls='liked';
+      else if(t.preference==='dislike') cls='disliked';
+      else cls='tried';
+    }
+    const face=t?getFoodFace(t.preference, t.status==='allergic'):'😶';
+    const badge=t?(t.status==='allergic'?'!':'✓'):'';
+    return `<div class="fcard ${cls}" onclick="tapFood('${f.n}')">
+      <span class="face">${face}</span>
+      <span class="fname">${f.n}</span>
+      <div class="fbadge">${badge}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// RECORD SHEET
+// ═══════════════════════════════════════════════════
+function tapFood(name){
+  curFood=name; selPref2=null; allergyOn=false; selRxns=[];
+  selAmt='半份(3-5匙)';
+  document.querySelectorAll('.pbtn').forEach(b=>b.className='pbtn');
+  document.querySelectorAll('#amt-row .chip').forEach(b=>b.classList.toggle('sel',b.dataset.v==='半份(3-5匙)'));
+  document.querySelectorAll('#rxn-row .chip').forEach(b=>b.classList.remove('sel','selr'));
+  document.getElementById('asw').classList.remove('on');
+  document.getElementById('rxnwrap').classList.remove('show');
+  document.getElementById('ahint').textContent='如有起疹子、嘔吐等，請開啟';
+  document.getElementById('sr-note').value='';
+  const t=triedFoods[name];
+  if(t?.preference){
+    const cls={like:'sl',meh:'sm',dislike:'sd'}[t.preference];
+    const btn=document.querySelector(`.pbtn[data-v="${t.preference}"]`);
+    if(btn){btn.classList.add(cls);selPref2=t.preference;}
+  }
+  const now=new Date();
+  const face=t?getFoodFace(t.preference,t.status==='allergic'):'😶';
+  document.getElementById('sr-title').textContent=face+' '+name;
+  document.getElementById('sr-sub').textContent=now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})+' · 記錄本次進食情況';
+  openSheet('record');
+}
+function selPref(el){
+  document.querySelectorAll('.pbtn').forEach(b=>b.className='pbtn');
+  const cls={like:'sl',meh:'sm',dislike:'sd'}[el.dataset.v];
+  el.classList.add(cls); selPref2=el.dataset.v;
+}
+function toggleAllergy(){
+  allergyOn=!allergyOn;
+  document.getElementById('asw').classList.toggle('on',allergyOn);
+  document.getElementById('rxnwrap').classList.toggle('show',allergyOn);
+  document.getElementById('ahint').textContent=allergyOn?'請選擇出現的反應（可複選）':'如有起疹子、嘔吐等，請開啟';
+  if(!allergyOn){selRxns=[];document.querySelectorAll('#rxn-row .chip').forEach(b=>b.classList.remove('sel','selr'));}
+}
+function togRxn(el){
+  el.classList.toggle('selr'); el.classList.toggle('sel',el.classList.contains('selr'));
+  const v=el.dataset.v;
+  if(el.classList.contains('selr')) selRxns.push(v);
+  else selRxns=selRxns.filter(r=>r!==v);
+}
+function saveRecord(){
+  if(!curFood)return;
+  const now=new Date();
+  const isAllergic=allergyOn&&selRxns.length>0;
+  const rec={
+    id:Date.now(), food:curFood,
+    time:now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}),
+    date:now.toLocaleDateString('zh-TW'),
+    amount:selAmt, preference:selPref2,
+    isAllergic, reactions:isAllergic?[...selRxns]:[],
+    note:document.getElementById('sr-note').value.trim(),
+    who:curUser.name||curUser.role||'',
+    whoRole:curUser.role||'',
+  };
+  records.unshift(rec);
+  const ex=triedFoods[curFood]||{count:0};
+  triedFoods[curFood]={
+    status:isAllergic?'allergic':'tried',
+    preference:selPref2||ex.preference,
+    reactions:isAllergic?[...selRxns]:(ex.reactions||[]),
+    allergyDate:isAllergic?rec.date:ex.allergyDate,
+    count:(ex.count||0)+1,
+  };
+  saveShared(); closeSheet('record');
+  renderToday(); renderFoodGrid(curCat);
+  toast(isAllergic?'⚠️ 已記錄，注意過敏反應':'✓ 紀錄完成！');
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER TODAY
+// ═══════════════════════════════════════════════════
+function renderToday(){
+  renderXP();
+  const today=new Date().toLocaleDateString('zh-TW');
+  const tr=records.filter(r=>r.date===today);
+  document.getElementById('s-today').textContent=tr.length;
+  document.getElementById('s-foods').textContent=Object.keys(triedFoods).length;
+  document.getElementById('s-alert').textContent=Object.values(triedFoods).filter(v=>v.status==='allergic').length;
+
+  // Allergy countdown
+  const als=Object.entries(triedFoods).filter(([,v])=>v.status==='allergic'&&v.allergyDate);
+  const asec=document.getElementById('allergy-sec');
+  if(als.length){
+    asec.style.display='block';
+    document.getElementById('allergy-list').innerHTML=als.map(([name,info])=>{
+      const d=new Date(info.allergyDate.replace(/\//g,'-'));
+      const left=Math.ceil((d.getTime()+3*864e5-Date.now())/864e5);
+      return `<div class="acard">
+        <div class="acount"><div class="anum">${left>0?left:'✓'}</div><div class="aunit">${left>0?'天後':'完成'}</div></div>
+        <div class="ainfo">
+          <div class="afood">🤒 ${name}</div>
+          <div class="asub">${left>0?'建議 '+left+' 天後再次嘗試':'可重新嘗試，請謹慎觀察'}</div>
+          <div class="arxns">${(info.reactions||[]).map(r=>`<span class="pill pr">${r}</span>`).join('')}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } else { asec.style.display='none'; }
+
+  const el=document.getElementById('today-log');
+  if(!tr.length){
+    el.innerHTML=`<div class="empty"><div class="ei">🌱</div><div class="et">今天還沒有紀錄</div><div class="eh">前往「食材」頁面點選食材來記錄</div></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="llist">${tr.map(renderRow).join('')}</div>`;
+}
+function renderRow(r){
+  const iconCls=r.isAllergic?'bad':r.preference==='like'?'ok':r.preference==='dislike'?'meh':'pl';
+  const face=getFoodFace(r.preference,r.isAllergic);
+  const prefLabel={like:'😍 喜歡',meh:'😐 普通',dislike:'😤 不喜歡'}[r.preference]||'';
+  const prefCls={like:'pg',meh:'pa',dislike:'pp'}[r.preference]||'';
+  const whoColor=r.whoRole?ROLE_COLOR[r.whoRole]||'#8E8E93':'#8E8E93';
+  const whoTxt=r.who||r.whoRole||'';
+  return `<div class="lrow">
+    <div class="licon ${iconCls}">${face}</div>
+    <div class="lbody">
+      <div class="lname">${r.food}</div>
+      <div class="ldet">
+        <span class="pill pp">${r.amount}</span>
+        ${prefLabel?`<span class="pill ${prefCls}">${prefLabel}</span>`:''}
+        ${r.reactions.map(rx=>`<span class="pill pr">${rx}</span>`).join('')}
+        ${whoTxt?`<span style="display:inline-flex;align-items:center;gap:3px"><span class="who-dot" style="background:${whoColor}"></span><span style="font-size:11px;color:var(--lbl3)">${whoTxt}</span></span>`:''}
+        ${r.note?`<span style="font-size:11px;color:var(--lbl3)">· ${r.note}</span>`:''}
+      </div>
+    </div>
+    <div class="ltm">${r.time||''}</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// HISTORY
+// ═══════════════════════════════════════════════════
+function renderHistory(){
+  const el=document.getElementById('hist-content');
+  if(!records.length){
+    el.innerHTML=`<div class="empty" style="padding-top:40px"><div class="ei">📅</div><div class="et">還沒有任何紀錄</div></div>`;return;
+  }
+  const byDate={};
+  records.forEach(r=>{(byDate[r.date]=byDate[r.date]||[]).push(r);});
+  el.innerHTML=Object.entries(byDate).map(([date,recs])=>
+    `<div class="dhdr">${date}</div><div class="llist">${recs.map(renderRow).join('')}</div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// RECIPES
+// ═══════════════════════════════════════════════════
+function countChars(el){
+  document.getElementById('char-count').textContent=el.value.length;
+}
+function openRecipeSheet(editId){
+  document.getElementById('recipe-sheet-title').textContent=editId?'編輯食譜':'新增食譜';
+  document.getElementById('rec-edit-id').value=editId||'';
+  if(editId){
+    const r=recipes.find(r=>r.id===editId);
+    if(r){
+      document.getElementById('rec-name').value=r.name;
+      document.getElementById('rec-body').value=r.body;
+      document.getElementById('char-count').textContent=r.body.length;
+    }
+  } else {
+    document.getElementById('rec-name').value='';
+    document.getElementById('rec-body').value='';
+    document.getElementById('char-count').textContent='0';
+  }
+  openSheet('recipe');
+}
+function saveRecipe(){
+  const name=document.getElementById('rec-name').value.trim();
+  const body=document.getElementById('rec-body').value.trim();
+  if(!name){toast('請輸入食譜名稱');return;}
+  if(!body){toast('請輸入食材與做法');return;}
+  const editId=document.getElementById('rec-edit-id').value;
+  if(editId){
+    const idx=recipes.findIndex(r=>r.id===editId);
+    if(idx>=0) recipes[idx]={...recipes[idx],name,body,updatedAt:Date.now()};
+  } else {
+    recipes.unshift({id:'r'+Date.now(),name,body,createdAt:Date.now(),who:curUser.name||curUser.role||'',whoRole:curUser.role||''});
+  }
+  saveShared(); closeSheet('recipe'); renderRecipes();
+  toast('✓ 食譜已儲存');
+}
+function deleteRecipe(id){
+  if(!confirm('確定要刪除這個食譜嗎？'))return;
+  recipes=recipes.filter(r=>r.id!==id);
+  saveShared(); renderRecipes(); toast('已刪除');
+}
+function renderRecipes(){
+  const el=document.getElementById('recipe-list');
+  if(!recipes.length){
+    el.innerHTML=`<div class="empty"><div class="ei">📖</div><div class="et">還沒有食譜</div><div class="eh">點擊右上角「＋ 新增食譜」開始記錄</div></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="rcards">${recipes.map(r=>{
+    const whoColor=r.whoRole?ROLE_COLOR[r.whoRole]||'#8E8E93':'#8E8E93';
+    const whoTxt=r.who||r.whoRole||'';
+    const date=r.createdAt?new Date(r.createdAt).toLocaleDateString('zh-TW'):'';
+    return `<div class="rcard">
+      <div class="rcard-top">
+        <div class="rcard-avatar">🍲</div>
+        <div class="rcard-info">
+          <div class="rcard-title">${r.name}</div>
+          <div class="rcard-meta">
+            ${date?`<span class="pill pp">${date}</span>`:''}
+            ${whoTxt?`<span style="display:inline-flex;align-items:center;gap:3px"><span class="who-dot" style="background:${whoColor}"></span><span class="pill" style="background:${whoColor+'22'};color:${whoColor}">${whoTxt}</span></span>`:''}
+          </div>
+        </div>
+      </div>
+      <div class="rcard-ingr">${r.body.replace(/\n/g,'<br>')}</div>
+      <div class="rcard-actions">
+        <button class="rcard-btn" onclick="shareRecipe('${r.id}')">分享食譜</button>
+        <button class="rcard-btn" onclick="openRecipeSheet('${r.id}')">編輯</button>
+        <button class="rcard-btn del" onclick="deleteRecipe('${r.id}')">刪除</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// SHARE RECIPE
+// ═══════════════════════════════════════════════════
+function shareRecipe(id){
+  const r=recipes.find(x=>x.id===id);
+  if(!r)return;
+  const payload=JSON.stringify({name:r.name,body:r.body,who:r.who||'',whoRole:r.whoRole||''});
+  const encoded=btoa(unescape(encodeURIComponent(payload)));
+  const url=location.href.split('?')[0]+'?recipe='+encoded;
+  shareUrl=url;
+  document.getElementById('share-recipe-name').textContent='「'+r.name+'」';
+  document.getElementById('share-url-text').textContent=url;
+  openSheet('share');
+}
+function copyShareUrl(){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(shareUrl).then(()=>toast('✓ 連結已複製！'));
+  } else {
+    const ta=document.createElement('textarea');
+    ta.value=shareUrl; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('✓ 連結已複製！');
+  }
+}
+function checkSharedRecipeInUrl(){
+  const params=new URLSearchParams(location.search);
+  const encoded=params.get('recipe');
+  if(!encoded)return;
+  try{
+    const data=JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    // Show shared recipe
+    document.body.innerHTML=`
+      <div style="max-width:430px;margin:0 auto;padding:24px 20px;font-family:'Noto Sans TC',-apple-system,sans-serif;color:#000">
+        <div style="font-size:13px;color:#8E8E93;margin-bottom:6px">副食品日記 · 分享食譜</div>
+        <h1 style="font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;margin-bottom:8px">🍲 ${data.name}</h1>
+        ${data.who?`<div style="font-size:13px;color:#8E8E93;margin-bottom:16px">由 ${data.who} 分享</div>`:''}
+        <div style="background:#F2F2F7;border-radius:16px;padding:20px;font-size:15px;line-height:1.8;white-space:pre-wrap">${data.body}</div>
+        <a href="${location.href.split('?')[0]}" style="display:block;margin-top:24px;background:linear-gradient(135deg,#FF6B35,#FF9500);color:#fff;border-radius:14px;padding:15px;text-align:center;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;text-decoration:none">開始記錄我的副食品 →</a>
+      </div>`;
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════════════
+// CUSTOM FOOD
+// ═══════════════════════════════════════════════════
+function addCustFood(){
+  const name=document.getElementById('cust-name').value.trim();
+  if(!name){toast('請輸入食材名稱');return;}
+  const catEl=document.querySelector('#cust-cat-row .chip.sel');
+  const cat=catEl?catEl.dataset.v:'其他';
+  if(!FOOD_DB[cat]) FOOD_DB[cat]=[];
+  if(FOOD_DB[cat].find(f=>f.n===name)){toast('已存在此食材');return;}
+  FOOD_DB[cat].push({n:name});
+  if(!customFoods[cat]) customFoods[cat]=[];
+  customFoods[cat].push({n:name});
+  saveShared(); curCat=cat;
+  renderCatTabs(); renderFoodGrid(cat);
+  document.getElementById('cust-name').value='';
+  closeSheet('custom'); toast('✓ 已新增「'+name+'」');
+}
+
+// ═══════════════════════════════════════════════════
+// AI
+// ═══════════════════════════════════════════════════
+async function loadAI(){
+  const el=document.getElementById('ai-content');
+  el.innerHTML=`<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  const tried=Object.keys(triedFoods);
+  const allergic=Object.entries(triedFoods).filter(([,v])=>v.status==='allergic').map(([k])=>k);
+  const liked=Object.entries(triedFoods).filter(([,v])=>v.preference==='like').map(([k])=>k);
+  const prompt=`你是台灣嬰幼兒副食品專家，寶寶7-9個月。
+已嘗試：${tried.length?tried.join('、'):'尚未嘗試'}。過敏：${allergic.length?allergic.join('、'):'無'}。喜歡：${liked.length?liked.join('、'):'尚未記錄'}。
+請回覆純 JSON，不要任何其他文字：
+{"foods":[{"name":"","emoji":"","reason":"","prep":"","tags":[]}],"recipes":[{"name":"","emoji":"","ingredients":"","steps":"","tags":[]}],"tips":""}
+推薦4種食材和3個食譜，避開過敏食材。`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const txt=data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
+    renderAI(JSON.parse(txt));
+  }catch(e){
+    el.innerHTML=`<div class="empty"><div class="ei">😓</div><div class="et">載入失敗，請稍後再試</div></div>`;
+  }
+}
+function renderAI(data){
+  const el=document.getElementById('ai-content');
+  let h='';
+  if(data.tips) h+=`<div class="aircard" style="background:var(--amb-bg);border:1.5px solid rgba(255,149,0,.2)"><div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💡</span><div style="font-size:13px;color:var(--lbl);line-height:1.7">${data.tips}</div></div></div>`;
+  if(data.foods?.length){
+    h+=`<div style="font-size:11px;font-weight:700;color:var(--lbl2);letter-spacing:.05em;margin:16px 0 8px;padding:0 4px;text-transform:uppercase">推薦嘗試食材</div>`;
+    data.foods.forEach(f=>{
+      h+=`<div class="aircard"><div class="airtop"><div class="airbadge" style="background:var(--acc-bg)">${f.emoji}</div><div><div class="airname">${f.name}</div><div class="airsub">${f.prep}</div></div></div><div class="airbody">${f.reason}</div><div class="airtags">${(f.tags||[]).map(t=>`<span class="airtag">${t}</span>`).join('')}</div></div>`;
+    });
+  }
+  if(data.recipes?.length){
+    h+=`<div style="font-size:11px;font-weight:700;color:var(--lbl2);letter-spacing:.05em;margin:16px 0 8px;padding:0 4px;text-transform:uppercase">推薦食譜</div>`;
+    data.recipes.forEach(r=>{
+      h+=`<div class="aircard"><div class="airtop"><div class="airbadge" style="background:var(--grn-bg)">${r.emoji}</div><div><div class="airname">${r.name}</div><div class="airsub">食材：${r.ingredients}</div></div></div><div class="airbody">${r.steps}</div><div class="airtags">${(r.tags||[]).map(t=>`<span class="airtag">${t}</span>`).join('')}</div></div>`;
+    });
+  }
+  el.innerHTML=h;
+}
+
+// ═══════════════════════════════════════════════════
+// XP LEVEL SYSTEM
+// ═══════════════════════════════════════════════════
+const XP_LEVELS = [
+  {lv:1, name:'美食小探險家', req:0,  next:5,  badge:'🌱 初次嘗試'},
+  {lv:2, name:'蔬菜小達人',   req:5,  next:10, badge:'🥦 蔬菜愛好者'},
+  {lv:3, name:'穀物小廚師',   req:10, next:18, badge:'🍚 粥粥達人'},
+  {lv:4, name:'蛋白質獵人',   req:18, next:28, badge:'🥚 蛋蛋英雄'},
+  {lv:5, name:'水果小王子',   req:28, next:40, badge:'🍎 果汁達人'},
+  {lv:6, name:'副食品高手',   req:40, next:55, badge:'🍲 廚藝進階'},
+  {lv:7, name:'營養均衡師',   req:55, next:72, badge:'⭐ 均衡大師'},
+  {lv:8, name:'美食大冒險家', req:72, next:90, badge:'🏆 冒險先鋒'},
+  {lv:9, name:'百味通達者',   req:90, next:110,badge:'💎 味覺大師'},
+  {lv:10,name:'副食品傳說',   req:110,next:110,badge:'👑 傳說等級'},
+];
+const MILESTONE_BADGES = [
+  {at:1,  label:'🌟 初次嘗試'},
+  {at:5,  label:'🥕 蔬菜愛好者'},
+  {at:10, label:'🍳 料理新手'},
+  {at:20, label:'🎯 探索達人'},
+  {at:30, label:'🌈 彩虹飲食'},
+  {at:50, label:'🏅 半百勇士'},
+  {at:80, label:'🔥 食材狂人'},
+];
+
+function renderXP() {
+  const total = Object.keys(triedFoods).length;
+  let cur = XP_LEVELS[0];
+  for (let i = XP_LEVELS.length - 1; i >= 0; i--) {
+    if (total >= XP_LEVELS[i].req) { cur = XP_LEVELS[i]; break; }
+  }
+  const isMax = cur.lv === 10;
+  const progress = isMax ? 1 : (total - cur.req) / (cur.next - cur.req);
+  const pct = Math.min(100, Math.round(progress * 100));
+  const circ = 2 * Math.PI * 31; // 194.8
+
+  document.getElementById('xp-lv').textContent = 'Lv.' + cur.lv;
+  document.getElementById('xp-title').textContent = cur.name;
+  document.getElementById('xp-sub').textContent = isMax
+    ? '已達到最高等級！恭喜🎉'
+    : '再嘗試 ' + (cur.next - total) + ' 種食材可升級！';
+  document.getElementById('xp-bar').style.width = pct + '%';
+  document.getElementById('xp-cur').textContent = total + ' 種食材';
+  document.getElementById('xp-max').textContent = isMax ? '最高等級' : '目標 ' + cur.next + ' 種';
+
+  // ring color by level
+  const ringColors = ['#FF6B35','#FF9500','#34C759','#007AFF','#AF52DE','#FF2D55','#FF6B35','#FF9500','#34C759','#FFD700'];
+  const fill = document.getElementById('xp-ring-fill');
+  fill.setAttribute('stroke', ringColors[(cur.lv - 1) % ringColors.length]);
+  fill.setAttribute('stroke-dashoffset', circ * (1 - progress));
+
+  // milestone badges
+  const earned = MILESTONE_BADGES.filter(b => total >= b.at);
+  const badgesEl = document.getElementById('xp-badges');
+  if (earned.length) {
+    badgesEl.style.display = 'flex';
+    badgesEl.innerHTML = earned.map(b => `<span class="xp-badge">${b.label}</span>`).join('');
+  } else {
+    badgesEl.style.display = 'none';
+  }
+}
+
+
+
+// ═══════════════════════════════════════════════════
+// BABY MANAGEMENT
+// ═══════════════════════════════════════════════════
+const BABY_ICONS = ['🍼','🌱','⭐','🌸','🐥','🐣','🌈','🍎','🥕','🎀'];
+function babyIcon(b){
+  if(b.gender==='girl') return '🎀';
+  if(b.gender==='boy') return '🧸';
+  return '🍼';
+}
+function babyAgeLabel(birth){
+  if(!birth) return '未設定出生日期';
+  const d=Math.floor((Date.now()-new Date(birth))/864e5);
+  const m=Math.floor(d/30.4);
+  return m+'個月大 · 出生第'+d+'天';
+}
+function updateHdrBaby(){
+  const b=curBaby();
+  if(!b) return;
+  document.getElementById('hdr-baby-dot').textContent=babyIcon(b);
+  document.getElementById('hdr-baby-name').textContent=b.name||'寶寶';
+}
+function renderBabyList(){
+  const list=document.getElementById('baby-list');
+  list.innerHTML=babies.map(b=>`
+    <div class="baby-item${b.id===curBabyId?' act':''}" onclick="switchBaby('${b.id}')">
+      <div class="baby-item-icon">${babyIcon(b)}</div>
+      <div class="baby-item-info">
+        <div class="baby-item-name">${b.name||'寶寶'}</div>
+        <div class="baby-item-sub">${babyAgeLabel(b.birth)}</div>
+      </div>
+      <div class="baby-item-actions">
+        <button class="baby-item-btn" onclick="event.stopPropagation();startEditBaby('${b.id}')">編輯</button>
+        ${babies.length>1?`<button class="baby-item-btn" style="color:var(--red)" onclick="event.stopPropagation();deleteBaby('${b.id}')">刪除</button>`:''}
+      </div>
+    </div>`).join('');
+}
+function switchBaby(id){
+  curBabyId=id; saveLocal();
+  // reload this baby's data
+  records=[]; triedFoods={}; customFoods={};
+  loadShared();
+  updateHdrBaby(); renderToday(); renderFoodGrid(curCat);
+  closeSheet('babies');
+  const b=curBaby();
+  toast('已切換到 '+( b?.name||'寶寶'));
+}
+function startAddBaby(){
+  document.getElementById('baby-edit-id').value='';
+  document.getElementById('baby-edit-name').value='';
+  document.getElementById('baby-edit-birth').value='';
+  document.querySelectorAll('#baby-gender-row .chip').forEach(c=>c.classList.toggle('sel',c.dataset.v==='secret'));
+  document.getElementById('baby-edit-title').textContent='新增寶寶';
+  document.getElementById('baby-edit-form').style.display='block';
+}
+function startEditBaby(id){
+  const b=babies.find(x=>x.id===id); if(!b) return;
+  document.getElementById('baby-edit-id').value=id;
+  document.getElementById('baby-edit-name').value=b.name||'';
+  document.getElementById('baby-edit-birth').value=b.birth||'';
+  document.querySelectorAll('#baby-gender-row .chip').forEach(c=>c.classList.toggle('sel',c.dataset.v===(b.gender||'secret')));
+  document.getElementById('baby-edit-title').textContent='編輯寶寶資料';
+  document.getElementById('baby-edit-form').style.display='block';
+}
+function cancelBabyEdit(){
+  document.getElementById('baby-edit-form').style.display='none';
+}
+function saveBabyEdit(){
+  const name=document.getElementById('baby-edit-name').value.trim();
+  if(!name){toast('請輸入寶寶暱稱');return;}
+  const birth=document.getElementById('baby-edit-birth').value;
+  const gEl=document.querySelector('#baby-gender-row .chip.sel');
+  const gender=gEl?gEl.dataset.v:'secret';
+  const editId=document.getElementById('baby-edit-id').value;
+  if(editId){
+    const b=babies.find(x=>x.id===editId);
+    if(b){b.name=name;b.birth=birth;b.gender=gender;}
+  } else {
+    const nb={id:'baby_'+Date.now(),name,birth,gender};
+    babies.push(nb);
+    curBabyId=nb.id;
+    records=[]; triedFoods={}; customFoods={}; recipes=[];
+    loadShared();
+  }
+  saveLocal();
+  updateHdrBaby(); renderBabyList();
+  document.getElementById('baby-edit-form').style.display='none';
+  toast('✓ '+(editId?'已更新':'已新增')+' '+name);
+  if(!editId){ closeSheet('babies'); renderToday(); renderFoodGrid(curCat); }
+}
+function deleteBaby(id){
+  if(!confirm('確定要刪除這個寶寶的所有資料嗎？')) return;
+  babies=babies.filter(b=>b.id!==id);
+  if(curBabyId===id) curBabyId=babies[0]?.id||'';
+  saveLocal();
+  records=[]; triedFoods={}; customFoods={}; recipes=[];
+  loadShared();
+  updateHdrBaby(); renderBabyList(); renderToday(); renderFoodGrid(curCat);
+  toast('已刪除');
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+function init(){
+  checkSharedRecipeInUrl();
+  loadAll();
+  const now=new Date();
+  document.getElementById('date-chip').textContent=now.toLocaleDateString('zh-TW',{month:'short',day:'numeric',weekday:'short'});
+  updateHdrUser();
+  updateHdrBaby();
+  renderCatTabs();
+  renderFoodGrid('蔬菜類');
+  renderToday();
+  // Override openSheet for user to populate form
+  document.querySelector('.user-btn').onclick=openUserSheet;
+  // Override recipe + button
+  document.querySelector('.sact[onclick="openSheet(\'recipe\')"]')?.setAttribute('onclick','openRecipeSheet()');
+}
+init();
+</script>
+</body>
+</html>
