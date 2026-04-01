@@ -88,7 +88,7 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .xp-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);}
 .xp-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--amb-bg);color:var(--amb);border:1px solid rgba(255,149,0,.2);}
 
-/* Food grid - emoji face design */
+/* ── Food grid — emoji face design ── */
 .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
 .fcard{
   background:var(--sur);border-radius:var(--r);padding:14px 8px 12px;
@@ -96,23 +96,21 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
   transition:all .18s var(--spring);position:relative;user-select:none;overflow:hidden;
 }
 .fcard:active{transform:scale(.91);}
-.fcard.tried{border-color:var(--grn);background:var(--grn-bg);}
-.fcard.liked{border-color:var(--grn);background:var(--grn-bg);}
-.fcard.disliked{border-color:var(--grn);background:var(--grn-bg);}
-.fcard.allergic{border-color:var(--red);background:var(--red-bg);}
+/* Liked / disliked = green */
+.fcard.liked,.fcard.disliked,.fcard.tried{border-color:var(--grn);background:var(--grn-bg);}
+/* Allergic overrides to red; liked/disliked+allergic also red */
+.fcard.allergic,.fcard.liked.allergic,.fcard.disliked.allergic{border-color:var(--red);background:var(--red-bg);}
 .face{font-size:30px;line-height:1;margin-bottom:5px;display:block;filter:grayscale(1);opacity:.38;transition:all .25s;}
-.fcard.tried .face,.fcard.liked .face,.fcard.disliked .face{filter:grayscale(0);opacity:1;}
-.fcard.allergic .face{filter:grayscale(0);opacity:1;}
+.fcard.tried .face,.fcard.liked .face,.fcard.disliked .face,.fcard.allergic .face{filter:grayscale(0);opacity:1;}
 .fname{font-size:12px;font-weight:600;color:var(--lbl);line-height:1.3;}
 .fbadge{position:absolute;top:5px;right:5px;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:9px;color:#fff;}
 .fcard.tried .fbadge,.fcard.liked .fbadge,.fcard.disliked .fbadge{display:flex;background:var(--grn);}
-.fcard.allergic .fbadge{display:flex;background:var(--red);}
+.fcard.allergic .fbadge,.fcard.liked.allergic .fbadge,.fcard.disliked.allergic .fbadge{display:flex;background:var(--red);}
 
-/* Log list */
+/* ── Log list ── */
 .llist{background:var(--sur);border-radius:var(--rlg);overflow:hidden;margin-bottom:16px;}
-.lrow{display:flex;align-items:center;padding:12px 16px;gap:11px;border-bottom:.5px solid var(--sep);}
+.lrow{display:flex;align-items:center;padding:12px 16px;gap:11px;border-bottom:.5px solid var(--sep);background:var(--sur);}
 .lrow:last-child{border-bottom:none;}
-.lrow:active{background:var(--fill2);}
 .licon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .licon.ok{background:var(--grn-bg);}
 .licon.bad{background:var(--red-bg);}
@@ -130,7 +128,22 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .pp{background:var(--fill);color:var(--lbl2);}
 .pb{background:var(--blu-bg);color:var(--blu);}
 
-/* Allergy countdown */
+/* ── Swipe-to-delete ── */
+.sw-wrap{position:relative;overflow:hidden;}
+.sw-wrap:last-child .lrow{border-bottom:none;}
+.sw-del{
+  position:absolute;right:0;top:0;bottom:0;width:80px;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:3px;cursor:pointer;
+  transform:translateX(80px);transition:transform .2s var(--ease);
+}
+.sw-del span{font-size:18px;}
+.sw-del small{font-size:10px;font-weight:700;color:#fff;}
+.sw-wrap.open .sw-del{transform:translateX(0);}
+.sw-wrap .lrow{transition:transform .2s var(--ease);}
+.sw-wrap.open .lrow{transform:translateX(-80px);}
+
+/* ── Allergy countdown ── */
 .acard{background:var(--sur);border-radius:var(--rlg);border-left:4px solid var(--red);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;}
 .acount{width:52px;height:52px;border-radius:14px;background:var(--red-bg);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .anum{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--red);line-height:1;}
@@ -140,22 +153,22 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .asub{font-size:12px;color:var(--lbl2);margin-top:2px;}
 .arxns{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
 
-/* Cat scroll */
+/* ── Cat scroll ── */
 .catscroll{overflow-x:auto;padding:0 16px 14px;display:flex;gap:8px;}
 .catscroll::-webkit-scrollbar{display:none;}
 .catchip{display:flex;align-items:center;gap:5px;white-space:nowrap;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:600;background:var(--sur);color:var(--lbl2);cursor:pointer;border:1.5px solid transparent;transition:all .18s;flex-shrink:0;font-family:'Noto Sans TC',sans-serif;}
 .catchip.act{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);}
 
-/* Empty */
+/* ── Empty ── */
 .empty{text-align:center;padding:40px 20px;}
 .ei{font-size:44px;margin-bottom:10px;}
 .et{font-size:14px;font-weight:500;color:var(--lbl2);}
 .eh{font-size:12px;color:var(--lbl3);margin-top:4px;}
 
-/* Date header */
+/* ── Date header ── */
 .dhdr{font-size:12px;font-weight:700;color:var(--lbl2);letter-spacing:.03em;padding:14px 20px 6px;}
 
-/* RECIPE CARDS */
+/* ── Recipe cards ── */
 .rcards{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
 .rcard{background:var(--sur);border-radius:var(--rlg);overflow:hidden;}
 .rcard-top{padding:16px 16px 12px;display:flex;gap:12px;align-items:flex-start;}
@@ -170,26 +183,35 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .rcard-btn.del{color:var(--red);}
 .rcard-btn+.rcard-btn{border-left:.5px solid var(--sep);}
 
-/* AI section */
-.aihdr{background:linear-gradient(135deg,#AF52DE,#7C6FCD);border-radius:var(--rlg);padding:20px;margin-bottom:16px;color:#fff;}
-.aititle{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;margin-bottom:4px;}
-.aisub{font-size:13px;opacity:.85;line-height:1.5;}
-.aibtn{margin-top:12px;padding:11px 20px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .15s;}
-.aibtn:active{transform:scale(.95);opacity:.8;}
-.aircard{background:var(--sur);border-radius:var(--rlg);padding:16px;margin-bottom:10px;}
-.airtop{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
-.airbadge{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.airname{font-size:16px;font-weight:700;color:var(--lbl);}
-.airsub{font-size:12px;color:var(--lbl2);margin-top:1px;}
-.airbody{font-size:13px;color:var(--lbl2);line-height:1.7;}
-.airtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
-.airtag{padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;background:var(--pur-bg);color:var(--pur);}
-.dots{display:flex;gap:6px;justify-content:center;padding:32px 0;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--pur);opacity:.3;animation:dp 1.2s ease-in-out infinite;}
-.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
-@keyframes dp{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+/* ── Calendar ── */
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 10px;}
+.cal-month{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--lbl);}
+.cal-nav{width:36px;height:36px;border-radius:50%;background:var(--fill);border:none;cursor:pointer;font-size:18px;color:var(--lbl);display:flex;align-items:center;justify-content:center;transition:opacity .15s;}
+.cal-nav:active{opacity:.6;}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:6px;}
+.cal-wd{font-size:11px;font-weight:700;color:var(--lbl3);padding:4px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px;}
+.cal-day{
+  aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;cursor:pointer;
+  font-size:14px;font-weight:600;color:var(--lbl);
+  background:var(--sur);border:1.5px solid transparent;
+  transition:all .15s;position:relative;
+}
+.cal-day:active{transform:scale(.92);}
+.cal-day.other-month{color:var(--lbl3);background:transparent;}
+.cal-day.today{border-color:var(--acc);color:var(--acc);font-weight:900;}
+.cal-day.has-note::after{
+  content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
+  width:5px;height:5px;border-radius:50%;background:var(--acc);
+}
+.cal-day.has-note.today::after{background:var(--acc);}
+.cal-note-preview{background:var(--sur);border-radius:var(--rlg);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:opacity .15s;}
+.cal-note-preview:active{opacity:.7;}
+.cal-note-date{font-size:11px;font-weight:700;color:var(--lbl2);margin-bottom:4px;}
+.cal-note-text{font-size:14px;color:var(--lbl);line-height:1.6;white-space:pre-wrap;}
 
-/* Overlay + Sheet */
+/* ── Overlay + Sheet ── */
 .ovl{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:50;display:none;transition:background .3s;}
 .ovl.open{display:block;background:rgba(0,0,0,.45);}
 .sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;background:var(--sur);border-radius:20px 20px 0 0;z-index:51;transition:transform .4s var(--spring);will-change:transform;max-height:93dvh;overflow-y:auto;}
@@ -201,7 +223,7 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .ssub{font-size:13px;color:var(--lbl2);margin-bottom:18px;}
 .flbl{font-size:11px;font-weight:700;color:var(--lbl2);margin-bottom:8px;letter-spacing:.04em;text-transform:uppercase;}
 
-/* Pref */
+/* ── Pref ── */
 .prefrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px;}
 .pbtn{padding:14px 8px;border-radius:var(--r);text-align:center;border:2px solid var(--sep);background:var(--fill2);cursor:pointer;transition:all .18s var(--spring);font-family:'Noto Sans TC',sans-serif;}
 .pbtn:active{transform:scale(.93);}
@@ -214,13 +236,13 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .pbtn.sd{border-color:var(--lbl3);background:var(--fill);}
 .pbtn.sd .plbl{color:var(--lbl2);}
 
-/* Chip rows */
+/* ── Chip rows ── */
 .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
 .chip{padding:8px 15px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--sep);background:var(--fill2);color:var(--lbl2);cursor:pointer;transition:all .15s;font-family:'Noto Sans TC',sans-serif;}
 .chip.sel{border-color:var(--blu);background:var(--blu-bg);color:var(--blu);}
 .chip.selr{border-color:var(--red);background:var(--red-bg);color:var(--red);}
 
-/* Toggle */
+/* ── Toggle ── */
 .tgtog{background:var(--fill2);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;}
 .tgrow{display:flex;justify-content:space-between;align-items:center;}
 .tglbl{font-size:15px;font-weight:600;color:var(--lbl);}
@@ -232,18 +254,20 @@ body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);co
 .rxnwrap{overflow:hidden;max-height:0;transition:max-height .3s var(--ease),opacity .3s;opacity:0;pointer-events:none;padding-top:0;}
 .rxnwrap.show{max-height:200px;opacity:1;pointer-events:all;padding-top:12px;}
 
-/* Inputs */
+/* ── Inputs ── */
 .ninput{width:100%;padding:12px 14px;border-radius:var(--rsm);border:1.5px solid var(--sep);background:var(--fill2);color:var(--lbl);font-size:14px;font-family:'Noto Sans TC',sans-serif;outline:none;transition:border-color .2s;}
 .ninput:focus{border-color:var(--blu);}
 .ninput::placeholder{color:var(--lbl3);}
 textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
 
-/* Save btn */
+/* ── Save btn ── */
 .savebtn{width:100%;padding:15px;border-radius:var(--r);border:none;font-size:16px;font-weight:800;font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FF6B35,#FF9500);color:#fff;cursor:pointer;letter-spacing:.2px;transition:all .18s var(--spring);box-shadow:0 4px 14px rgba(255,107,53,.35);}
 .savebtn:active{transform:scale(.97);}
 .savebtn.pur{background:linear-gradient(135deg,#AF52DE,#7C6FCD);box-shadow:0 4px 14px rgba(175,82,222,.3);}
+.savebtn.grn{background:linear-gradient(135deg,#34C759,#30D158);box-shadow:0 4px 14px rgba(52,199,89,.3);}
+.savebtn.ghost{background:var(--fill);color:var(--lbl2);box-shadow:none;}
 
-/* User role selector */
+/* ── User role selector ── */
 .role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
 .rolebtn{padding:18px 8px;border-radius:var(--r);text-align:center;border:2px solid var(--sep);background:var(--fill2);cursor:pointer;transition:all .18s var(--spring);}
 .rolebtn:active{transform:scale(.93);}
@@ -252,14 +276,17 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
 .rolebtn.sel2{border-color:var(--blu);background:var(--blu-bg);}
 .rolebtn.sel2 .rlbl2{color:var(--blu);}
 
-/* Family code */
+/* ── Family code ── */
 .famcode{font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;letter-spacing:4px;color:var(--acc);text-align:center;padding:12px;background:var(--acc-bg);border-radius:var(--rsm);margin-bottom:8px;}
+.sync-status{font-size:12px;text-align:center;margin-bottom:10px;padding:6px 12px;border-radius:999px;display:inline-block;}
+.sync-status.on{background:var(--grn-bg);color:var(--grn);}
+.sync-status.off{background:var(--fill);color:var(--lbl3);}
 
-/* Toast */
+/* ── Toast ── */
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(6px) scale(.95);background:rgba(50,50,52,.92);backdrop-filter:blur(10px);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s var(--spring);z-index:200;white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
 
-/* Share modal overlay */
+/* ── Share modal ── */
 .share-box{background:var(--sur);border-radius:var(--rlg);padding:20px;margin:16px;}
 .share-url{font-size:11px;color:var(--lbl2);background:var(--fill2);border-radius:var(--rsm);padding:10px;word-break:break-all;margin-bottom:12px;line-height:1.5;}
 .share-actions{display:flex;gap:8px;}
@@ -271,14 +298,14 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
 /* ── Baby switcher ── */
 .baby-switcher-btn{display:flex;align-items:center;gap:6px;background:var(--fill);border-radius:999px;padding:5px 12px 5px 8px;border:none;cursor:pointer;font-family:inherit;transition:opacity .15s;max-width:160px;}
 .baby-switcher-btn:active{opacity:.6;}
-.baby-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-style:normal;}
+.baby-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-style:normal;overflow:hidden;}
 .baby-switcher-label{font-size:13px;font-weight:700;color:var(--lbl);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .baby-switcher-caret{font-size:10px;color:var(--lbl3);flex-shrink:0;}
 /* Baby cards in switcher sheet */
 .baby-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
 .baby-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--fill2);border-radius:var(--r);border:2px solid transparent;cursor:pointer;transition:all .15s;}
 .baby-item.act{border-color:var(--acc);background:var(--acc-bg);}
-.baby-item-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--sur);flex-shrink:0;}
+.baby-item-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--sur);flex-shrink:0;overflow:hidden;}
 .baby-item-info{flex:1;min-width:0;}
 .baby-item-name{font-size:15px;font-weight:700;color:var(--lbl);}
 .baby-item-sub{font-size:12px;color:var(--lbl2);margin-top:1px;}
@@ -290,6 +317,12 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
 /* Edit baby form inside switcher sheet */
 .baby-edit-form{background:var(--fill2);border-radius:var(--r);padding:14px;margin-bottom:16px;}
 .baby-edit-title{font-size:13px;font-weight:700;color:var(--lbl);margin-bottom:12px;}
+/* Baby avatar upload */
+.avatar-upload-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.avatar-preview{width:64px;height:64px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;flex-shrink:0;border:2px solid var(--sep);}
+.avatar-preview img{width:100%;height:100%;object-fit:cover;}
+.avatar-upload-btn{flex:1;padding:11px;border-radius:var(--rsm);border:1.5px dashed var(--sep);background:transparent;font-size:13px;font-weight:600;color:var(--lbl2);cursor:pointer;font-family:inherit;transition:all .15s;text-align:center;}
+.avatar-upload-btn:active{opacity:.7;}
 </style>
 </head>
 <body>
@@ -316,7 +349,7 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
       <button class="seg" onclick="switchPg('food',this)">食材</button>
       <button class="seg" onclick="switchPg('history',this)">紀錄</button>
       <button class="seg" onclick="switchPg('recipe',this)">食譜</button>
-      <button class="seg" onclick="switchPg('ai',this)">✨</button>
+      <button class="seg" onclick="switchPg('cal',this)">📅</button>
     </div>
   </div>
 </div>
@@ -354,7 +387,7 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
       </div>
 
       <div class="stats">
-        <div class="scard co"><div class="snum" id="s-today">0</div><div class="slbl">今日餐次</div></div>
+        <div class="scard co"><div class="snum" id="s-today">0</div><div class="slbl">今日食材</div></div>
         <div class="scard cg"><div class="snum" id="s-foods">0</div><div class="slbl">已試食材</div></div>
         <div class="scard cr"><div class="snum" id="s-alert">0</div><div class="slbl">過敏警示</div></div>
       </div>
@@ -373,7 +406,7 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
     <div class="pad">
       <div class="shdr">
         <span class="stitle" id="cat-lbl">蔬菜類</span>
-        <span class="sact" onclick="openSheet('custom')">＋ 自訂食材</span>
+        <span class="sact" onclick="openCustomSheet()">＋ 自訂食材</span>
       </div>
       <div class="fgrid" id="fgrid"></div>
     </div>
@@ -389,23 +422,27 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
     <div class="pad" style="padding-top:14px">
       <div class="shdr">
         <span class="stitle">我的食譜</span>
-        <span class="sact" onclick="openSheet('recipe')">＋ 新增食譜</span>
+        <span class="sact" onclick="openRecipeSheet()">＋ 新增食譜</span>
       </div>
       <div id="recipe-list"></div>
     </div>
   </div>
 
-  <!-- AI -->
-  <div id="pg-ai" class="pg">
-    <div class="pad" style="padding-top:14px">
-      <div class="aihdr">
-        <div class="aititle">✨ AI 副食品推薦</div>
-        <div class="aisub">根據已嘗試食材與喜好<br>推薦 7-9 個月寶寶的下一步</div>
-        <button class="aibtn" onclick="loadAI()">幫我推薦食材與食譜 →</button>
+  <!-- CALENDAR -->
+  <div id="pg-cal" class="pg">
+    <div class="pad" style="padding-top:4px">
+      <div class="cal-hdr">
+        <button class="cal-nav" onclick="shiftMonth(-1)">‹</button>
+        <div class="cal-month" id="cal-month-lbl"></div>
+        <button class="cal-nav" onclick="shiftMonth(1)">›</button>
       </div>
-      <div id="ai-content">
-        <div class="empty"><div class="ei">🤖</div><div class="et">點擊上方按鈕</div><div class="eh">AI 會根據你的紀錄個人化推薦</div></div>
+      <div class="cal-weekdays">
+        <div class="cal-wd">日</div><div class="cal-wd">一</div><div class="cal-wd">二</div>
+        <div class="cal-wd">三</div><div class="cal-wd">四</div><div class="cal-wd">五</div><div class="cal-wd">六</div>
       </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="shdr"><span class="stitle">本月備忘</span></div>
+      <div id="cal-notes-list"></div>
     </div>
   </div>
 
@@ -479,11 +516,24 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
     <div style="font-size:13px;color:var(--lbl2);margin-bottom:8px;line-height:1.6">所有家庭成員輸入相同代碼即可共享資料。首次使用請點「建立新家庭」，已有代碼請直接輸入。</div>
     <div id="fam-display" style="display:none">
       <div class="famcode" id="fam-code-show"></div>
-      <div style="font-size:12px;color:var(--lbl3);text-align:center;margin-bottom:14px">把這個代碼告訴家人，讓大家一起記錄</div>
+      <div style="font-size:12px;color:var(--lbl3);text-align:center;margin-bottom:8px">把這個代碼告訴家人，讓大家一起記錄</div>
     </div>
     <input class="ninput" id="u-famcode" placeholder="輸入 6 位家庭代碼（或留空單人使用）" style="margin-bottom:10px;font-family:'Nunito',sans-serif;letter-spacing:2px;font-size:16px;text-transform:uppercase"/>
+    <div id="sync-status-row" style="text-align:center;margin-bottom:10px;display:none">
+      <span class="sync-status" id="sync-status-lbl"></span>
+    </div>
     <button class="savebtn" style="margin-bottom:10px" onclick="genFamCode()">建立新家庭（產生代碼）</button>
+    <button class="savebtn grn" style="margin-bottom:10px" onclick="manualSync()">🔄 立即同步家庭資料</button>
     <button class="savebtn" onclick="saveUser()">儲存設定</button>
+
+    <div style="margin-top:20px;padding:14px;background:var(--fill2);border-radius:var(--rsm)">
+      <div style="font-size:12px;font-weight:700;color:var(--lbl2);margin-bottom:6px">☁️ 跨裝置同步設定</div>
+      <div style="font-size:12px;color:var(--lbl3);line-height:1.7">
+        若要讓不同手機即時看到彼此的紀錄，請在下方填入 Firebase 資料庫網址。<br>
+        設定方式：前往 <strong>console.firebase.google.com</strong>，建立專案 → Realtime Database → 複製資料庫網址。
+      </div>
+      <input class="ninput" id="u-firebase" placeholder="https://your-project-default-rtdb.firebaseio.com" style="margin-top:10px;font-size:12px"/>
+    </div>
   </div>
 </div>
 
@@ -542,7 +592,6 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
   </div>
 </div>
 
-
 <!-- ── BABIES SHEET ── -->
 <div class="ovl" id="ovl-babies" onclick="closeSheet('babies')"></div>
 <div class="sheet" id="sheet-babies">
@@ -555,6 +604,17 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
     <div class="baby-edit-form" id="baby-edit-form" style="display:none">
       <div class="baby-edit-title" id="baby-edit-title">新增寶寶</div>
       <input type="hidden" id="baby-edit-id"/>
+
+      <div class="flbl">寶寶大頭貼</div>
+      <div class="avatar-upload-row">
+        <div class="avatar-preview" id="baby-avatar-preview"><span id="baby-avatar-emoji">🍼</span></div>
+        <div style="flex:1">
+          <input type="file" id="baby-avatar-input" accept="image/*" style="display:none" onchange="previewAvatar(this)"/>
+          <button class="avatar-upload-btn" onclick="document.getElementById('baby-avatar-input').click()">📷 選擇照片</button>
+          <div style="font-size:11px;color:var(--lbl3);margin-top:5px">建議使用正方形照片效果最佳</div>
+        </div>
+      </div>
+
       <div class="flbl">寶寶暱稱 *</div>
       <input class="ninput" id="baby-edit-name" placeholder="例：小寶、妹妹、阿哲" style="margin-bottom:12px"/>
       <div class="flbl">出生日期</div>
@@ -567,9 +627,23 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
       </div>
       <div style="display:flex;gap:8px">
         <button class="savebtn" style="flex:1" onclick="saveBabyEdit()">儲存</button>
-        <button class="savebtn" style="flex:0 0 80px;background:var(--fill);color:var(--lbl2);box-shadow:none" onclick="cancelBabyEdit()">取消</button>
+        <button class="savebtn ghost" style="flex:0 0 80px" onclick="cancelBabyEdit()">取消</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ── CALENDAR NOTE SHEET ── -->
+<div class="ovl" id="ovl-calnote" onclick="closeSheet('calnote')"></div>
+<div class="sheet" id="sheet-calnote">
+  <div class="shandle"></div>
+  <div class="sbody">
+    <div class="stit" id="calnote-title">📅 行程備忘</div>
+    <div class="ssub" id="calnote-sub"></div>
+    <div class="flbl">今日飲食計畫 / 備忘</div>
+    <textarea class="ninput" id="calnote-text" placeholder="例：早上：南瓜泥&#10;中午：雞肉粥 + 菠菜&#10;晚上：豆腐泥&#10;&#10;備註：今天試第一次蛋黃，觀察過敏反應" style="min-height:160px;margin-bottom:18px"></textarea>
+    <button class="savebtn" onclick="saveCalNote()" style="margin-bottom:10px">儲存備忘</button>
+    <button class="savebtn ghost" id="calnote-del-btn" onclick="deleteCalNote()" style="display:none">刪除此備忘</button>
   </div>
 </div>
 
@@ -577,10 +651,17 @@ textarea.ninput{resize:vertical;min-height:100px;line-height:1.6;}
 
 <script>
 // ═══════════════════════════════════════════════════
-// DATA
+// FIREBASE CONFIG (optional — enables cross-device family sync)
+// ─────────────────────────────────────────────────────────────
+// 設定步驟：
+// 1. 前往 console.firebase.google.com 建立專案
+// 2. 建立 Realtime Database（選 test mode 或設規則為 public）
+// 3. 複製資料庫網址（格式：https://xxx-default-rtdb.firebaseio.com）
+// 4. 在 APP 的「家庭設定」底部填入網址，或直接貼在下方：
+const DEFAULT_FIREBASE_URL = 'https://baby-food-diary-87dad-default-rtdb.asia-southeast1.firebasedatabase.app';
 // ═══════════════════════════════════════════════════
-// All food cards use emoji FACES — the face changes based on preference
-// Default: 😶 (neutral, greyed out) → 😍 liked / 😤 disliked / ⚠️ allergic
+
+// ── FOOD DATABASE ──
 const FOOD_DB = {
   '蔬菜類':[
     {n:'南瓜'},{n:'地瓜'},{n:'胡蘿蔔'},{n:'菠菜'},{n:'青花菜'},{n:'馬鈴薯'},
@@ -598,32 +679,37 @@ const FOOD_DB = {
   '其他':[],
 };
 
+// ── 食材表情：依喜好優先，過敏改顏色不改表情 ──
 function getFoodFace(pref, isAllergic) {
-  if (isAllergic) return '😵';
   if (pref === 'like') return '😍';
-  if (pref === 'meh') return '😐';
   if (pref === 'dislike') return '😤';
-  return '😯';
+  if (pref === 'meh') return '😐';
+  if (isAllergic) return '😵';
+  return '😲'; // 未嘗試
 }
 
-// ── State ──
-let babies=[];          // [{id,name,birth,gender}]
-let curBabyId='';       // active baby id
-let records=[], triedFoods={}, recipes=[], customFoods={};
-let curUser={name:'',role:'',famCode:''};
-let curFood=null, selPref2=null, selAmt='半份(3-5匙)', allergyOn=false, selRxns=[];
-let curCat='蔬菜類';
-let shareUrl='';
+// ── STATE ──
+let babies = [];
+let curBabyId = '';
+let records = [], triedFoods = {}, recipes = [], customFoods = {}, calNotes = {};
+let curUser = { name:'', role:'', famCode:'', firebaseUrl:'' };
+let curFood = null, selPref2 = null, selAmt = '半份(3-5匙)', allergyOn = false, selRxns = [];
+let curCat = '蔬菜類';
+let shareUrl = '';
+let calYear, calMonth;
+let curCalDate = '';
+let pendingAvatarDataUrl = null;
+let fbSyncTimer = null;
 
 function curBaby(){ return babies.find(b=>b.id===curBabyId)||babies[0]||null; }
 function babyStorKey(k){
-  const fc=curUser.famCode||'__local__';
-  const bid=curBabyId||'default';
+  const fc = curUser.famCode || '__local__';
+  const bid = curBabyId || 'default';
   return fc+'_'+bid+'_'+k;
 }
 
 // ═══════════════════════════════════════════════════
-// STORAGE — uses famCode as key prefix for shared data
+// STORAGE
 // ═══════════════════════════════════════════════════
 const LOCAL_KEY = 'bft4';
 function storKey(k){ return babyStorKey(k); }
@@ -633,7 +719,9 @@ function saveShared(){
     localStorage.setItem(storKey('tried'), JSON.stringify(triedFoods));
     localStorage.setItem(storKey('recipes'), JSON.stringify(recipes));
     localStorage.setItem(storKey('custom'), JSON.stringify(customFoods));
+    localStorage.setItem(storKey('calNotes'), JSON.stringify(calNotes));
   }catch(e){}
+  fbPush(); // async fire-and-forget
 }
 function saveLocal(){
   try{
@@ -644,11 +732,11 @@ function saveLocal(){
 }
 function loadShared(){
   try{
-    records=JSON.parse(localStorage.getItem(storKey('records'))||'[]');
-    triedFoods=JSON.parse(localStorage.getItem(storKey('tried'))||'{}');
-    recipes=JSON.parse(localStorage.getItem(storKey('recipes'))||'[]');
-    customFoods=JSON.parse(localStorage.getItem(storKey('custom'))||'{}');
-    // Merge custom into FOOD_DB
+    records = JSON.parse(localStorage.getItem(storKey('records'))||'[]');
+    triedFoods = JSON.parse(localStorage.getItem(storKey('tried'))||'{}');
+    recipes = JSON.parse(localStorage.getItem(storKey('recipes'))||'[]');
+    customFoods = JSON.parse(localStorage.getItem(storKey('custom'))||'{}');
+    calNotes = JSON.parse(localStorage.getItem(storKey('calNotes'))||'{}');
     Object.entries(customFoods).forEach(([cat,items])=>{
       if(!FOOD_DB[cat]) FOOD_DB[cat]=[];
       items.forEach(f=>{ if(!FOOD_DB[cat].find(x=>x.n===f.n)) FOOD_DB[cat].push({n:f.n}); });
@@ -656,12 +744,11 @@ function loadShared(){
   }catch(e){}
 }
 function loadAll(){
-  try{ curUser=JSON.parse(localStorage.getItem(LOCAL_KEY+'_user')||'{"name":"","role":"","famCode":""}'); }catch(e){}
-  try{ babies=JSON.parse(localStorage.getItem(LOCAL_KEY+'_babies')||'[]'); }catch(e){}
-  try{ curBabyId=localStorage.getItem(LOCAL_KEY+'_curBaby')||''; }catch(e){}
-  // Create default baby if none
+  try{ curUser = JSON.parse(localStorage.getItem(LOCAL_KEY+'_user')||'{"name":"","role":"","famCode":"","firebaseUrl":""}'); }catch(e){}
+  try{ babies = JSON.parse(localStorage.getItem(LOCAL_KEY+'_babies')||'[]'); }catch(e){}
+  try{ curBabyId = localStorage.getItem(LOCAL_KEY+'_curBaby')||''; }catch(e){}
   if(!babies.length){
-    const def={id:'baby_'+Date.now(),name:'寶寶',birth:'',gender:'secret'};
+    const def = {id:'baby_'+Date.now(),name:'寶寶',birth:'',gender:'secret'};
     babies=[def]; curBabyId=def.id; saveLocal();
   }
   if(!curBabyId||!babies.find(b=>b.id===curBabyId)) curBabyId=babies[0].id;
@@ -669,10 +756,120 @@ function loadAll(){
 }
 
 // ═══════════════════════════════════════════════════
+// FIREBASE SYNC (optional)
+// ═══════════════════════════════════════════════════
+function getFirebaseUrl(){
+  return (curUser.firebaseUrl||DEFAULT_FIREBASE_URL||'').replace(/\/$/,'');
+}
+
+async function fbPush(){
+  const url = getFirebaseUrl();
+  if(!url || !curUser.famCode) return;
+  const fc = curUser.famCode;
+  const bid = curBabyId||'default';
+  try{
+    await fetch(`${url}/fam/${fc}/${bid}.json`,{
+      method:'PUT',
+      body:JSON.stringify({records,tried:triedFoods,recipes,custom:customFoods,calNotes}),
+      headers:{'Content-Type':'application/json'}
+    });
+    await fetch(`${url}/fam/${fc}/babies.json`,{
+      method:'PUT',
+      body:JSON.stringify(babies),
+      headers:{'Content-Type':'application/json'}
+    });
+  }catch(e){}
+}
+
+async function fbPull(){
+  const url = getFirebaseUrl();
+  if(!url || !curUser.famCode) return false;
+  const fc = curUser.famCode;
+  const bid = curBabyId||'default';
+  try{
+    const bRes = await fetch(`${url}/fam/${fc}/babies.json`);
+    if(bRes.ok){
+      const fbBabies = await bRes.json();
+      if(fbBabies && Array.isArray(fbBabies)){
+        babies = fbBabies;
+        if(!babies.find(b=>b.id===curBabyId)) curBabyId=babies[0]?.id||'';
+      }
+    }
+    const dRes = await fetch(`${url}/fam/${fc}/${bid}.json`);
+    if(dRes.ok){
+      const fbData = await dRes.json();
+      if(fbData){
+        if(fbData.records) records = fbData.records;
+        if(fbData.tried) triedFoods = fbData.tried;
+        if(fbData.recipes) recipes = fbData.recipes;
+        if(fbData.calNotes) calNotes = fbData.calNotes;
+        if(fbData.custom){
+          customFoods = fbData.custom;
+          Object.entries(customFoods).forEach(([cat,items])=>{
+            if(!FOOD_DB[cat]) FOOD_DB[cat]=[];
+            items.forEach(f=>{ if(!FOOD_DB[cat].find(x=>x.n===f.n)) FOOD_DB[cat].push({n:f.n}); });
+          });
+        }
+      }
+    }
+    saveLocal(); localStorage.setItem(storKey('records'),JSON.stringify(records));
+    localStorage.setItem(storKey('tried'),JSON.stringify(triedFoods));
+    localStorage.setItem(storKey('recipes'),JSON.stringify(recipes));
+    localStorage.setItem(storKey('calNotes'),JSON.stringify(calNotes));
+    return true;
+  }catch(e){ return false; }
+}
+
+function startFbSync(){
+  if(fbSyncTimer) clearInterval(fbSyncTimer);
+  if(!getFirebaseUrl()||!curUser.famCode) return;
+  fbSyncTimer = setInterval(async()=>{
+    const updated = await fbPull();
+    if(updated){
+      renderToday();
+      const activeSeg = document.querySelector('.seg.act')?.textContent;
+      if(activeSeg==='紀錄') renderHistory();
+      if(activeSeg==='📅') renderCalendar();
+      updateSyncStatus(true);
+    }
+  }, 30000);
+}
+
+function updateSyncStatus(on){
+  const row = document.getElementById('sync-status-row');
+  const lbl = document.getElementById('sync-status-lbl');
+  if(!row||!lbl) return;
+  const url = getFirebaseUrl();
+  if(url && curUser.famCode){
+    row.style.display='block';
+    lbl.className='sync-status on';
+    lbl.textContent='☁️ 雲端同步已開啟（每 30 秒更新）';
+  } else {
+    row.style.display='block';
+    lbl.className='sync-status off';
+    lbl.textContent='💾 本機模式（未設定 Firebase）';
+  }
+}
+
+async function manualSync(){
+  const url = getFirebaseUrl();
+  if(!url){toast('請先填入 Firebase 資料庫網址');return;}
+  if(!curUser.famCode){toast('請先設定家庭代碼');return;}
+  toast('同步中...');
+  const ok = await fbPull();
+  if(ok){
+    renderToday(); renderHistory(); renderCalendar(); updateHdrBaby();
+    toast('✓ 已同步最新家庭資料');
+  } else {
+    toast('❌ 同步失敗，請檢查網址是否正確');
+  }
+}
+
+// ═══════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════
 function toast(msg){
-  const t=document.getElementById('toast');
+  const t = document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2400);
 }
@@ -682,11 +879,12 @@ function switchPg(name, el){
   document.getElementById('pg-'+name).classList.add('act');
   el.classList.add('act');
   document.getElementById('scroll').scrollTop=0;
-  const tmap={today:'今日',food:'食材庫',history:'所有紀錄',recipe:'我的食譜',ai:'AI 推薦'};
-  document.getElementById('pg-title').textContent=tmap[name];
+  const tmap={today:'今日',food:'食材庫',history:'所有紀錄',recipe:'我的食譜',cal:'行事曆'};
+  document.getElementById('pg-title').textContent=tmap[name]||'';
   if(name==='history') renderHistory();
   if(name==='food'){ renderCatTabs(); renderFoodGrid(curCat); }
   if(name==='recipe') renderRecipes();
+  if(name==='cal') renderCalendar();
 }
 function openSheet(name){
   if(name==='babies') renderBabyList();
@@ -721,22 +919,25 @@ function genFamCode(){
   toast('已產生家庭代碼：'+code);
 }
 function saveUser(){
-  const role=document.querySelector('.rolebtn.sel2')?.dataset.v||curUser.role;
-  const name=document.getElementById('u-name').value.trim();
-  const fc=document.getElementById('u-famcode').value.trim().toUpperCase();
+  const role = document.querySelector('.rolebtn.sel2')?.dataset.v||curUser.role;
+  const name = document.getElementById('u-name').value.trim();
+  const fc = document.getElementById('u-famcode').value.trim().toUpperCase();
+  const fbUrl = document.getElementById('u-firebase').value.trim();
   if(!role){toast('請選擇你的角色');return;}
-  const oldCode=curUser.famCode;
-  curUser={name,role,famCode:fc};
+  const oldCode = curUser.famCode;
+  curUser = {name, role, famCode:fc, firebaseUrl:fbUrl};
   saveLocal();
-  if(fc && fc!==oldCode){ loadShared(); }
+  if(fc && (fc!==oldCode || fbUrl)){ loadShared(); }
   updateHdrUser();
   closeSheet('user');
   toast('✓ 設定已儲存');
+  startFbSync();
+  updateSyncStatus();
   renderToday(); renderRecipes();
 }
 function updateHdrUser(){
-  const r=curUser.role;
-  const icon=ROLE_ICON[r]||'🌱';
+  const r = curUser.role;
+  const icon = ROLE_ICON[r]||'🌱';
   document.getElementById('hdr-avatar').textContent=icon;
   document.getElementById('hdr-avatar').style.background=r?(ROLE_COLOR[r]+'22'):'linear-gradient(135deg,#FF9500,#FF6B35)';
   document.getElementById('hdr-uname').textContent=curUser.name||r||'設定';
@@ -744,6 +945,7 @@ function updateHdrUser(){
 function openUserSheet(){
   document.getElementById('u-name').value=curUser.name||'';
   document.getElementById('u-famcode').value=curUser.famCode||'';
+  document.getElementById('u-firebase').value=curUser.firebaseUrl||DEFAULT_FIREBASE_URL||'';
   if(curUser.famCode){
     document.getElementById('fam-code-show').textContent=curUser.famCode;
     document.getElementById('fam-display').style.display='block';
@@ -753,6 +955,7 @@ function openUserSheet(){
       b.classList.toggle('sel2', b.dataset.v===curUser.role);
     });
   }
+  updateSyncStatus();
   openSheet('user');
 }
 
@@ -761,7 +964,7 @@ function openUserSheet(){
 // ═══════════════════════════════════════════════════
 const CAT_EMOJI={蔬菜類:'🥦',穀物主食:'🌾',蛋白質:'🥩',水果類:'🍎',其他:'🫙'};
 function renderCatTabs(){
-  const cats=Object.keys(FOOD_DB).filter(c=>c!=='其他'||(FOOD_DB['其他']?.length>0));
+  const cats = Object.keys(FOOD_DB).filter(c=>c!=='其他'||(FOOD_DB['其他']?.length>0));
   document.getElementById('catscroll').innerHTML=cats.map(c=>
     `<div class="catchip${c===curCat?' act':''}" onclick="selCat('${c}',this)">${CAT_EMOJI[c]||'🍽'} ${c}</div>`
   ).join('');
@@ -774,29 +977,42 @@ function selCat(name,el){
   renderFoodGrid(name);
 }
 function renderFoodGrid(cat){
-  const foods=FOOD_DB[cat]||[];
-  const grid=document.getElementById('fgrid');
+  const foods = FOOD_DB[cat]||[];
+  const grid = document.getElementById('fgrid');
   if(!foods.length){
     grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:24px 0;color:var(--lbl3);font-size:13px">點擊「自訂食材」新增</div>`;
     return;
   }
   grid.innerHTML=foods.map(f=>{
-    const t=triedFoods[f.n];
-    let cls='';
+    const t = triedFoods[f.n];
+    let cls = '';
     if(t){
-      if(t.status==='allergic') cls='allergic';
+      const isAllergic = t.status==='allergic';
+      if(isAllergic && t.preference==='like') cls='liked allergic';
+      else if(isAllergic && t.preference==='dislike') cls='disliked allergic';
+      else if(isAllergic) cls='allergic';
       else if(t.preference==='like') cls='liked';
       else if(t.preference==='dislike') cls='disliked';
       else cls='tried';
     }
-    const face=t?getFoodFace(t.preference, t.status==='allergic'):'😶';
-    const badge=t?(t.status==='allergic'?'!':'✓'):'';
+    const face = t ? getFoodFace(t.preference, t.status==='allergic') : '😲';
+    const badge = t ? (t.status==='allergic'?'!':'✓') : '';
     return `<div class="fcard ${cls}" onclick="tapFood('${f.n}')">
       <span class="face">${face}</span>
       <span class="fname">${f.n}</span>
       <div class="fbadge">${badge}</div>
     </div>`;
   }).join('');
+}
+
+// ── 自訂食材：自動對應當前分類 ──
+function openCustomSheet(){
+  // 自動選取當前瀏覽的食材分類
+  document.querySelectorAll('#cust-cat-row .chip').forEach(c=>{
+    c.classList.toggle('sel', c.dataset.v===curCat);
+  });
+  document.getElementById('cust-name').value='';
+  openSheet('custom');
 }
 
 // ═══════════════════════════════════════════════════
@@ -812,14 +1028,14 @@ function tapFood(name){
   document.getElementById('rxnwrap').classList.remove('show');
   document.getElementById('ahint').textContent='如有起疹子、嘔吐等，請開啟';
   document.getElementById('sr-note').value='';
-  const t=triedFoods[name];
+  const t = triedFoods[name];
   if(t?.preference){
     const cls={like:'sl',meh:'sm',dislike:'sd'}[t.preference];
-    const btn=document.querySelector(`.pbtn[data-v="${t.preference}"]`);
+    const btn = document.querySelector(`.pbtn[data-v="${t.preference}"]`);
     if(btn){btn.classList.add(cls);selPref2=t.preference;}
   }
-  const now=new Date();
-  const face=t?getFoodFace(t.preference,t.status==='allergic'):'😶';
+  const now = new Date();
+  const face = t ? getFoodFace(t.preference, t.status==='allergic') : '😲';
   document.getElementById('sr-title').textContent=face+' '+name;
   document.getElementById('sr-sub').textContent=now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})+' · 記錄本次進食情況';
   openSheet('record');
@@ -871,17 +1087,41 @@ function saveRecord(){
 }
 
 // ═══════════════════════════════════════════════════
+// DELETE RECORD
+// ═══════════════════════════════════════════════════
+function deleteRecord(id){
+  records = records.filter(r=>r.id!==id);
+  // Rebuild triedFoods from remaining records
+  triedFoods = {};
+  records.forEach(r=>{
+    const ex = triedFoods[r.food]||{count:0};
+    const isAllergic = r.isAllergic&&(r.reactions?.length>0);
+    triedFoods[r.food]={
+      status:isAllergic?'allergic':(ex.status||'tried'),
+      preference:r.preference||ex.preference,
+      reactions:isAllergic?(r.reactions||[]):(ex.reactions||[]),
+      allergyDate:isAllergic?r.date:ex.allergyDate,
+      count:(ex.count||0)+1,
+    };
+  });
+  saveShared();
+  renderHistory(); renderToday(); renderFoodGrid(curCat);
+  toast('已刪除紀錄');
+}
+
+// ═══════════════════════════════════════════════════
 // RENDER TODAY
 // ═══════════════════════════════════════════════════
 function renderToday(){
   renderXP();
   const today=new Date().toLocaleDateString('zh-TW');
   const tr=records.filter(r=>r.date===today);
-  document.getElementById('s-today').textContent=tr.length;
+  // 今日食材：當天嘗試的不重複食材數
+  const uniqueFoodsToday = new Set(tr.map(r=>r.food)).size;
+  document.getElementById('s-today').textContent=uniqueFoodsToday;
   document.getElementById('s-foods').textContent=Object.keys(triedFoods).length;
   document.getElementById('s-alert').textContent=Object.values(triedFoods).filter(v=>v.status==='allergic').length;
 
-  // Allergy countdown
   const als=Object.entries(triedFoods).filter(([,v])=>v.status==='allergic'&&v.allergyDate);
   const asec=document.getElementById('allergy-sec');
   if(als.length){
@@ -905,8 +1145,9 @@ function renderToday(){
     el.innerHTML=`<div class="empty"><div class="ei">🌱</div><div class="et">今天還沒有紀錄</div><div class="eh">前往「食材」頁面點選食材來記錄</div></div>`;
     return;
   }
-  el.innerHTML=`<div class="llist">${tr.map(renderRow).join('')}</div>`;
+  el.innerHTML=`<div class="llist">${tr.map(r=>renderRow(r)).join('')}</div>`;
 }
+
 function renderRow(r){
   const iconCls=r.isAllergic?'bad':r.preference==='like'?'ok':r.preference==='dislike'?'meh':'pl';
   const face=getFoodFace(r.preference,r.isAllergic);
@@ -921,7 +1162,7 @@ function renderRow(r){
       <div class="ldet">
         <span class="pill pp">${r.amount}</span>
         ${prefLabel?`<span class="pill ${prefCls}">${prefLabel}</span>`:''}
-        ${r.reactions.map(rx=>`<span class="pill pr">${rx}</span>`).join('')}
+        ${(r.reactions||[]).map(rx=>`<span class="pill pr">${rx}</span>`).join('')}
         ${whoTxt?`<span style="display:inline-flex;align-items:center;gap:3px"><span class="who-dot" style="background:${whoColor}"></span><span style="font-size:11px;color:var(--lbl3)">${whoTxt}</span></span>`:''}
         ${r.note?`<span style="font-size:11px;color:var(--lbl3)">· ${r.note}</span>`:''}
       </div>
@@ -931,18 +1172,73 @@ function renderRow(r){
 }
 
 // ═══════════════════════════════════════════════════
-// HISTORY
+// HISTORY — 含滑動刪除
 // ═══════════════════════════════════════════════════
+let openSwipeId = null;
+
 function renderHistory(){
   const el=document.getElementById('hist-content');
   if(!records.length){
-    el.innerHTML=`<div class="empty" style="padding-top:40px"><div class="ei">📅</div><div class="et">還沒有任何紀錄</div></div>`;return;
+    el.innerHTML=`<div class="empty" style="padding-top:40px"><div class="ei">📅</div><div class="et">還沒有任何紀錄</div><div class="eh">向左滑動可刪除紀錄</div></div>`;return;
   }
   const byDate={};
   records.forEach(r=>{(byDate[r.date]=byDate[r.date]||[]).push(r);});
   el.innerHTML=Object.entries(byDate).map(([date,recs])=>
-    `<div class="dhdr">${date}</div><div class="llist">${recs.map(renderRow).join('')}</div>`
+    `<div class="dhdr">${date}</div>
+     <div class="llist" style="overflow:visible;background:transparent;border-radius:0">
+       ${recs.map(r=>`
+         <div class="sw-wrap" id="sw-${r.id}" style="border-radius:0;${recs[0]===r?'border-radius:var(--rlg) var(--rlg) 0 0;overflow:hidden':''}${recs[recs.length-1]===r?'border-radius:0 0 var(--rlg) var(--rlg);overflow:hidden':''}">
+           ${renderRow(r)}
+           <div class="sw-del" onclick="deleteRecord(${r.id})"><span>🗑</span><small>刪除</small></div>
+         </div>`).join('')}
+     </div>`
   ).join('');
+
+  // 為每個 llist 套正確的背景/圓角
+  el.querySelectorAll('.llist').forEach(list=>{
+    list.style.background='var(--sur)';
+    list.style.borderRadius='var(--rlg)';
+    list.style.overflow='hidden';
+    list.style.marginBottom='16px';
+  });
+
+  // 綁定滑動事件
+  el.querySelectorAll('.sw-wrap').forEach(wrap=>{
+    const row = wrap.querySelector('.lrow');
+    let startX=0, startY=0, dragging=false;
+    row.addEventListener('touchstart',e=>{
+      startX=e.touches[0].clientX;
+      startY=e.touches[0].clientY;
+      dragging=false;
+    },{passive:true});
+    row.addEventListener('touchmove',e=>{
+      const dx=e.touches[0].clientX-startX;
+      const dy=e.touches[0].clientY-startY;
+      if(!dragging && Math.abs(dy)>Math.abs(dx)) return; // 垂直滾動優先
+      dragging=true;
+      if(dx<0){
+        const id=wrap.id.replace('sw-','');
+        if(openSwipeId && openSwipeId!==id){
+          const prev=document.getElementById('sw-'+openSwipeId);
+          if(prev) prev.classList.remove('open');
+        }
+        if(dx<-40){ wrap.classList.add('open'); openSwipeId=id; }
+        else { wrap.classList.remove('open'); }
+      } else if(dx>10){
+        wrap.classList.remove('open');
+        if(openSwipeId===wrap.id.replace('sw-','')) openSwipeId=null;
+      }
+    },{passive:true});
+    row.addEventListener('touchend',()=>{
+      dragging=false;
+    });
+    // 點擊其他地方關閉
+    row.addEventListener('click',()=>{
+      if(wrap.classList.contains('open')){
+        wrap.classList.remove('open'); openSwipeId=null;
+      }
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════════
@@ -1019,9 +1315,7 @@ function renderRecipes(){
   }).join('')}</div>`;
 }
 
-// ═══════════════════════════════════════════════════
-// SHARE RECIPE
-// ═══════════════════════════════════════════════════
+// ── SHARE RECIPE ──
 function shareRecipe(id){
   const r=recipes.find(x=>x.id===id);
   if(!r)return;
@@ -1049,7 +1343,6 @@ function checkSharedRecipeInUrl(){
   if(!encoded)return;
   try{
     const data=JSON.parse(decodeURIComponent(escape(atob(encoded))));
-    // Show shared recipe
     document.body.innerHTML=`
       <div style="max-width:430px;margin:0 auto;padding:24px 20px;font-family:'Noto Sans TC',-apple-system,sans-serif;color:#000">
         <div style="font-size:13px;color:#8E8E93;margin-bottom:6px">副食品日記 · 分享食譜</div>
@@ -1081,51 +1374,6 @@ function addCustFood(){
 }
 
 // ═══════════════════════════════════════════════════
-// AI
-// ═══════════════════════════════════════════════════
-async function loadAI(){
-  const el=document.getElementById('ai-content');
-  el.innerHTML=`<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
-  const tried=Object.keys(triedFoods);
-  const allergic=Object.entries(triedFoods).filter(([,v])=>v.status==='allergic').map(([k])=>k);
-  const liked=Object.entries(triedFoods).filter(([,v])=>v.preference==='like').map(([k])=>k);
-  const prompt=`你是台灣嬰幼兒副食品專家，寶寶7-9個月。
-已嘗試：${tried.length?tried.join('、'):'尚未嘗試'}。過敏：${allergic.length?allergic.join('、'):'無'}。喜歡：${liked.length?liked.join('、'):'尚未記錄'}。
-請回覆純 JSON，不要任何其他文字：
-{"foods":[{"name":"","emoji":"","reason":"","prep":"","tags":[]}],"recipes":[{"name":"","emoji":"","ingredients":"","steps":"","tags":[]}],"tips":""}
-推薦4種食材和3個食譜，避開過敏食材。`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
-    });
-    const data=await res.json();
-    const txt=data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
-    renderAI(JSON.parse(txt));
-  }catch(e){
-    el.innerHTML=`<div class="empty"><div class="ei">😓</div><div class="et">載入失敗，請稍後再試</div></div>`;
-  }
-}
-function renderAI(data){
-  const el=document.getElementById('ai-content');
-  let h='';
-  if(data.tips) h+=`<div class="aircard" style="background:var(--amb-bg);border:1.5px solid rgba(255,149,0,.2)"><div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">💡</span><div style="font-size:13px;color:var(--lbl);line-height:1.7">${data.tips}</div></div></div>`;
-  if(data.foods?.length){
-    h+=`<div style="font-size:11px;font-weight:700;color:var(--lbl2);letter-spacing:.05em;margin:16px 0 8px;padding:0 4px;text-transform:uppercase">推薦嘗試食材</div>`;
-    data.foods.forEach(f=>{
-      h+=`<div class="aircard"><div class="airtop"><div class="airbadge" style="background:var(--acc-bg)">${f.emoji}</div><div><div class="airname">${f.name}</div><div class="airsub">${f.prep}</div></div></div><div class="airbody">${f.reason}</div><div class="airtags">${(f.tags||[]).map(t=>`<span class="airtag">${t}</span>`).join('')}</div></div>`;
-    });
-  }
-  if(data.recipes?.length){
-    h+=`<div style="font-size:11px;font-weight:700;color:var(--lbl2);letter-spacing:.05em;margin:16px 0 8px;padding:0 4px;text-transform:uppercase">推薦食譜</div>`;
-    data.recipes.forEach(r=>{
-      h+=`<div class="aircard"><div class="airtop"><div class="airbadge" style="background:var(--grn-bg)">${r.emoji}</div><div><div class="airname">${r.name}</div><div class="airsub">食材：${r.ingredients}</div></div></div><div class="airbody">${r.steps}</div><div class="airtags">${(r.tags||[]).map(t=>`<span class="airtag">${t}</span>`).join('')}</div></div>`;
-    });
-  }
-  el.innerHTML=h;
-}
-
-// ═══════════════════════════════════════════════════
 // XP LEVEL SYSTEM
 // ═══════════════════════════════════════════════════
 const XP_LEVELS = [
@@ -1149,54 +1397,139 @@ const MILESTONE_BADGES = [
   {at:50, label:'🏅 半百勇士'},
   {at:80, label:'🔥 食材狂人'},
 ];
-
-function renderXP() {
+function renderXP(){
   const total = Object.keys(triedFoods).length;
   let cur = XP_LEVELS[0];
-  for (let i = XP_LEVELS.length - 1; i >= 0; i--) {
-    if (total >= XP_LEVELS[i].req) { cur = XP_LEVELS[i]; break; }
+  for(let i=XP_LEVELS.length-1;i>=0;i--){
+    if(total>=XP_LEVELS[i].req){cur=XP_LEVELS[i];break;}
   }
-  const isMax = cur.lv === 10;
-  const progress = isMax ? 1 : (total - cur.req) / (cur.next - cur.req);
-  const pct = Math.min(100, Math.round(progress * 100));
-  const circ = 2 * Math.PI * 31; // 194.8
+  const isMax = cur.lv===10;
+  const progress = isMax?1:(total-cur.req)/(cur.next-cur.req);
+  const pct = Math.min(100,Math.round(progress*100));
+  const circ = 2*Math.PI*31;
+  document.getElementById('xp-lv').textContent='Lv.'+cur.lv;
+  document.getElementById('xp-title').textContent=cur.name;
+  document.getElementById('xp-sub').textContent=isMax?'已達到最高等級！恭喜🎉':'再嘗試 '+(cur.next-total)+' 種食材可升級！';
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('xp-cur').textContent=total+' 種食材';
+  document.getElementById('xp-max').textContent=isMax?'最高等級':'目標 '+cur.next+' 種';
+  const ringColors=['#FF6B35','#FF9500','#34C759','#007AFF','#AF52DE','#FF2D55','#FF6B35','#FF9500','#34C759','#FFD700'];
+  const fill=document.getElementById('xp-ring-fill');
+  fill.setAttribute('stroke',ringColors[(cur.lv-1)%ringColors.length]);
+  fill.setAttribute('stroke-dashoffset',circ*(1-progress));
+  const earned=MILESTONE_BADGES.filter(b=>total>=b.at);
+  const badgesEl=document.getElementById('xp-badges');
+  if(earned.length){
+    badgesEl.style.display='flex';
+    badgesEl.innerHTML=earned.map(b=>`<span class="xp-badge">${b.label}</span>`).join('');
+  } else { badgesEl.style.display='none'; }
+}
 
-  document.getElementById('xp-lv').textContent = 'Lv.' + cur.lv;
-  document.getElementById('xp-title').textContent = cur.name;
-  document.getElementById('xp-sub').textContent = isMax
-    ? '已達到最高等級！恭喜🎉'
-    : '再嘗試 ' + (cur.next - total) + ' 種食材可升級！';
-  document.getElementById('xp-bar').style.width = pct + '%';
-  document.getElementById('xp-cur').textContent = total + ' 種食材';
-  document.getElementById('xp-max').textContent = isMax ? '最高等級' : '目標 ' + cur.next + ' 種';
+// ═══════════════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════════════
+function initCalendar(){
+  const now = new Date();
+  calYear=now.getFullYear(); calMonth=now.getMonth();
+}
+function shiftMonth(dir){
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderCalendar();
+}
+function renderCalendar(){
+  const now = new Date();
+  const todayStr = now.toLocaleDateString('zh-TW');
+  const y=calYear, m=calMonth;
+  const monthNames=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('cal-month-lbl').textContent=y+'年 '+monthNames[m];
 
-  // ring color by level
-  const ringColors = ['#FF6B35','#FF9500','#34C759','#007AFF','#AF52DE','#FF2D55','#FF6B35','#FF9500','#34C759','#FFD700'];
-  const fill = document.getElementById('xp-ring-fill');
-  fill.setAttribute('stroke', ringColors[(cur.lv - 1) % ringColors.length]);
-  fill.setAttribute('stroke-dashoffset', circ * (1 - progress));
+  const firstDay = new Date(y,m,1).getDay(); // 0=Sun
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const daysInPrev = new Date(y,m,0).getDate();
 
-  // milestone badges
-  const earned = MILESTONE_BADGES.filter(b => total >= b.at);
-  const badgesEl = document.getElementById('xp-badges');
-  if (earned.length) {
-    badgesEl.style.display = 'flex';
-    badgesEl.innerHTML = earned.map(b => `<span class="xp-badge">${b.label}</span>`).join('');
+  let cells = '';
+  // Previous month fill
+  for(let i=firstDay-1;i>=0;i--){
+    cells+=`<div class="cal-day other-month">${daysInPrev-i}</div>`;
+  }
+  // Current month
+  for(let d=1;d<=daysInMonth;d++){
+    const date = new Date(y,m,d);
+    const dateStr = date.toLocaleDateString('zh-TW');
+    const isToday = dateStr===todayStr;
+    const hasNote = !!calNotes[dateStr];
+    cells+=`<div class="cal-day${isToday?' today':''}${hasNote?' has-note':''}" onclick="openCalNote('${dateStr}')">${d}</div>`;
+  }
+  // Next month fill
+  const total = firstDay+daysInMonth;
+  const remaining = total%7===0?0:7-(total%7);
+  for(let d=1;d<=remaining;d++){
+    cells+=`<div class="cal-day other-month">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=cells;
+
+  // Notes list for current month
+  const notesList = document.getElementById('cal-notes-list');
+  const monthNotes = Object.entries(calNotes).filter(([k])=>{
+    // k is zh-TW locale date, match year/month
+    try{
+      const parts=k.split('/');
+      return parseInt(parts[0])===y&&parseInt(parts[1])-1===m;
+    }catch(e){return false;}
+  }).sort((a,b)=>a[0]>b[0]?1:-1);
+
+  if(!monthNotes.length){
+    notesList.innerHTML=`<div class="empty" style="padding:20px"><div class="ei">📝</div><div class="et">點選日期新增備忘</div><div class="eh">可以預先規劃每天要讓寶寶吃什麼</div></div>`;
   } else {
-    badgesEl.style.display = 'none';
+    notesList.innerHTML=monthNotes.map(([date,note])=>`
+      <div class="cal-note-preview" onclick="openCalNote('${date}')">
+        <div class="cal-note-date">📅 ${date}</div>
+        <div class="cal-note-text">${note}</div>
+      </div>`).join('');
   }
 }
 
-
+function openCalNote(dateStr){
+  curCalDate=dateStr;
+  document.getElementById('calnote-title').textContent='📅 '+dateStr;
+  document.getElementById('calnote-sub').textContent='點選食材或輸入今日飲食計畫';
+  document.getElementById('calnote-text').value=calNotes[dateStr]||'';
+  const delBtn=document.getElementById('calnote-del-btn');
+  delBtn.style.display=calNotes[dateStr]?'block':'none';
+  openSheet('calnote');
+}
+function saveCalNote(){
+  const text=document.getElementById('calnote-text').value.trim();
+  if(!text){ toast('請輸入備忘內容'); return; }
+  calNotes[curCalDate]=text;
+  saveShared();
+  closeSheet('calnote');
+  renderCalendar();
+  toast('✓ 備忘已儲存');
+}
+function deleteCalNote(){
+  delete calNotes[curCalDate];
+  saveShared();
+  closeSheet('calnote');
+  renderCalendar();
+  toast('已刪除備忘');
+}
 
 // ═══════════════════════════════════════════════════
-// BABY MANAGEMENT
+// BABY MANAGEMENT + AVATAR
 // ═══════════════════════════════════════════════════
-const BABY_ICONS = ['🍼','🌱','⭐','🌸','🐥','🐣','🌈','🍎','🥕','🎀'];
 function babyIcon(b){
   if(b.gender==='girl') return '🎀';
   if(b.gender==='boy') return '🧸';
   return '🍼';
+}
+function babyAvatarHTML(b, size=40){
+  if(b.avatar){
+    return `<img src="${b.avatar}" style="width:${size}px;height:${size}px;object-fit:cover;border-radius:50%">`;
+  }
+  return babyIcon(b);
 }
 function babyAgeLabel(birth){
   if(!birth) return '未設定出生日期';
@@ -1207,14 +1540,21 @@ function babyAgeLabel(birth){
 function updateHdrBaby(){
   const b=curBaby();
   if(!b) return;
-  document.getElementById('hdr-baby-dot').textContent=babyIcon(b);
+  const dotEl=document.getElementById('hdr-baby-dot');
+  if(b.avatar){
+    dotEl.innerHTML=`<img src="${b.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    dotEl.textContent=babyIcon(b);
+  }
   document.getElementById('hdr-baby-name').textContent=b.name||'寶寶';
 }
 function renderBabyList(){
   const list=document.getElementById('baby-list');
   list.innerHTML=babies.map(b=>`
     <div class="baby-item${b.id===curBabyId?' act':''}" onclick="switchBaby('${b.id}')">
-      <div class="baby-item-icon">${babyIcon(b)}</div>
+      <div class="baby-item-icon">
+        ${b.avatar?`<img src="${b.avatar}" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:22px">${babyIcon(b)}</span>`}
+      </div>
       <div class="baby-item-info">
         <div class="baby-item-name">${b.name||'寶寶'}</div>
         <div class="baby-item-sub">${babyAgeLabel(b.birth)}</div>
@@ -1227,20 +1567,34 @@ function renderBabyList(){
 }
 function switchBaby(id){
   curBabyId=id; saveLocal();
-  // reload this baby's data
-  records=[]; triedFoods={}; customFoods={};
+  records=[]; triedFoods={}; customFoods={}; calNotes={};
   loadShared();
   updateHdrBaby(); renderToday(); renderFoodGrid(curCat);
   closeSheet('babies');
   const b=curBaby();
-  toast('已切換到 '+( b?.name||'寶寶'));
+  toast('已切換到 '+(b?.name||'寶寶'));
 }
+
+// ── Avatar upload ──
+function previewAvatar(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    pendingAvatarDataUrl=e.target.result;
+    const prev=document.getElementById('baby-avatar-preview');
+    prev.innerHTML=`<img src="${pendingAvatarDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  };
+  reader.readAsDataURL(file);
+}
+
 function startAddBaby(){
   document.getElementById('baby-edit-id').value='';
   document.getElementById('baby-edit-name').value='';
   document.getElementById('baby-edit-birth').value='';
   document.querySelectorAll('#baby-gender-row .chip').forEach(c=>c.classList.toggle('sel',c.dataset.v==='secret'));
   document.getElementById('baby-edit-title').textContent='新增寶寶';
+  pendingAvatarDataUrl=null;
+  document.getElementById('baby-avatar-preview').innerHTML=`<span id="baby-avatar-emoji">🍼</span>`;
   document.getElementById('baby-edit-form').style.display='block';
 }
 function startEditBaby(id){
@@ -1250,10 +1604,18 @@ function startEditBaby(id){
   document.getElementById('baby-edit-birth').value=b.birth||'';
   document.querySelectorAll('#baby-gender-row .chip').forEach(c=>c.classList.toggle('sel',c.dataset.v===(b.gender||'secret')));
   document.getElementById('baby-edit-title').textContent='編輯寶寶資料';
+  pendingAvatarDataUrl=null;
+  const prev=document.getElementById('baby-avatar-preview');
+  if(b.avatar){
+    prev.innerHTML=`<img src="${b.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    prev.innerHTML=`<span style="font-size:28px">${babyIcon(b)}</span>`;
+  }
   document.getElementById('baby-edit-form').style.display='block';
 }
 function cancelBabyEdit(){
   document.getElementById('baby-edit-form').style.display='none';
+  pendingAvatarDataUrl=null;
 }
 function saveBabyEdit(){
   const name=document.getElementById('baby-edit-name').value.trim();
@@ -1264,14 +1626,19 @@ function saveBabyEdit(){
   const editId=document.getElementById('baby-edit-id').value;
   if(editId){
     const b=babies.find(x=>x.id===editId);
-    if(b){b.name=name;b.birth=birth;b.gender=gender;}
+    if(b){
+      b.name=name; b.birth=birth; b.gender=gender;
+      if(pendingAvatarDataUrl) b.avatar=pendingAvatarDataUrl;
+    }
   } else {
     const nb={id:'baby_'+Date.now(),name,birth,gender};
+    if(pendingAvatarDataUrl) nb.avatar=pendingAvatarDataUrl;
     babies.push(nb);
     curBabyId=nb.id;
-    records=[]; triedFoods={}; customFoods={}; recipes=[];
+    records=[]; triedFoods={}; customFoods={}; calNotes={}; recipes=[];
     loadShared();
   }
+  pendingAvatarDataUrl=null;
   saveLocal();
   updateHdrBaby(); renderBabyList();
   document.getElementById('baby-edit-form').style.display='none';
@@ -1283,7 +1650,7 @@ function deleteBaby(id){
   babies=babies.filter(b=>b.id!==id);
   if(curBabyId===id) curBabyId=babies[0]?.id||'';
   saveLocal();
-  records=[]; triedFoods={}; customFoods={}; recipes=[];
+  records=[]; triedFoods={}; customFoods={}; calNotes={}; recipes=[];
   loadShared();
   updateHdrBaby(); renderBabyList(); renderToday(); renderFoodGrid(curCat);
   toast('已刪除');
@@ -1295,6 +1662,7 @@ function deleteBaby(id){
 function init(){
   checkSharedRecipeInUrl();
   loadAll();
+  initCalendar();
   const now=new Date();
   document.getElementById('date-chip').textContent=now.toLocaleDateString('zh-TW',{month:'short',day:'numeric',weekday:'short'});
   updateHdrUser();
@@ -1302,10 +1670,7 @@ function init(){
   renderCatTabs();
   renderFoodGrid('蔬菜類');
   renderToday();
-  // Override openSheet for user to populate form
-  document.querySelector('.user-btn').onclick=openUserSheet;
-  // Override recipe + button
-  document.querySelector('.sact[onclick="openSheet(\'recipe\')"]')?.setAttribute('onclick','openRecipeSheet()');
+  startFbSync(); // 若有設定 Firebase，開始自動同步
 }
 init();
 </script>
